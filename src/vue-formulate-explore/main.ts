@@ -38,6 +38,13 @@ Vue.use(VueFormulate, {
   },
 });
 
+// fa icons
+import "../fa-icons";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+Vue.component("fa-icon", FontAwesomeIcon);
+
+import "vue-step-progress/dist/main.css";
+
 const app = createApp({
   pinia: createPinia(),
   render: () => h(App),

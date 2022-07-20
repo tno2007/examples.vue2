@@ -18,7 +18,7 @@ export const logicalDataModel = {
   PrimaryApplicant: {
     Id: "a161b1bb-72a9-dd11-a616-001f2965fc1c",
     PreferredTitle: 100000000,
-    FirstName: "Joe",
+    FirstName: true,
     LastName: "Bloggs",
     DateOfBirth: "1993-06-17T01:00:00+02:00",
     Gender: 1,

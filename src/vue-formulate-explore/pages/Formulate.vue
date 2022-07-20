@@ -15,6 +15,7 @@ import Page7LifeStyle from "../components/pages/explore/Page7LifeStyle.vue";
 import Page8Objectives from "../components/pages/explore/Page8Objectives.vue";
 import Testing from "../components/pages/explore/Testing.vue";
 import { get, set } from "lodash";
+import StepProgress from "vue-step-progress";
 
 export default defineComponent({
   name: "PersonalDetails",
@@ -32,6 +33,7 @@ export default defineComponent({
     Page7LifeStyle,
     Page8Objectives,
     Testing,
+    StepProgress,
   },
   props: {},
   setup(props, context) {
@@ -41,8 +43,13 @@ export default defineComponent({
 
     const activePage = "Page1PersonalDetails";
 
+    const isSectionComplete = async (isComplete: boolean) => {
+      console.log("isSectionComplete", isComplete);
+    };
+
     const handleSubmit = async (data: any) => {
-      context.emit("handleSubmit", data);
+      //context.emit("handleSubmit", data);
+      console.log("submit data", data);
     };
 
     const setObjectsAsArrays = (obj: object, keys: string[]) => {
@@ -75,17 +82,42 @@ export default defineComponent({
       store.logicalDataModel = structuredResponse;
     });
 
-    return { activePage, formRef, store, handleSubmit, nextClick };
+    return {
+      activePage,
+      formRef,
+      store,
+      isSectionComplete,
+      handleSubmit,
+      nextClick,
+    };
   },
 });
 </script>
 
 <template>
   <div>
+    <div>
+      <StepProgress
+        :steps="[
+          'Personal details',
+          'Contact details',
+          'Nationalities',
+          'Family ancestry',
+        ]"
+        passive-color="#b5b5b5"
+        active-color="#23d160"
+        :passive-thickness="5"
+        :active-thickness="2"
+        :line-thickness="4"
+        :current-step="2"
+      ></StepProgress>
+    </div>
+
     <component
       :is="activePage"
       ref="appRef"
       @handleSubmit="handleSubmit"
+      @isSectionComplete="isSectionComplete"
       :modelProp="store.logicalDataModel"
     >
     </component>

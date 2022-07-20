@@ -1,4 +1,5 @@
 <script lang="ts">
+import { filledIn } from "../../../common/composables/useFormHelper";
 import { IModel } from "../../../common/typings/explore";
 import {
   defineComponent,
@@ -27,6 +28,19 @@ export default defineComponent({
       model: {} as any,
     });
 
+    const v = (val: any) => {
+      return val == null || val == "";
+    };
+
+    const isSectionComplete = async () => {
+      var value =
+        filledIn(data.model.PrimaryApplicant[0].PreferredTitle) &&
+        filledIn(data.model.PrimaryApplicant[0].FirstName) &&
+        filledIn(data.model.PrimaryApplicant[0].LastName);
+
+      context.emit("isSectionComplete", value);
+    };
+
     const handleSubmit = async (data: any) => {
       context.emit("handleSubmit", data);
     };
@@ -34,6 +48,8 @@ export default defineComponent({
     onMounted(async () => {
       await nextTick();
       data.model = props.modelProp;
+      //context.emit("isSectionComplete", isSectionComplete());
+      await isSectionComplete();
     });
 
     return {
