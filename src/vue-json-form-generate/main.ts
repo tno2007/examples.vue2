@@ -17,7 +17,7 @@ const app = createApp({
 });
 app.use(PiniaVuePlugin);
 
-import "bootstrap/dist/css/bootstrap.min.css";
+//import "bootstrap/dist/css/bootstrap.min.css";
 //import "bootstrap";
 //import "bootstrap-icons/font/bootstrap-icons.css";
 

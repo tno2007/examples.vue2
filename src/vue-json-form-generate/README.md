@@ -25,4 +25,9 @@ https://gitlab.com/formschema/native
 
 npm install --save @formschema/native
 
+- The best option so far.
+- Full TS support
+- Dont see v3 support... so formkit can still be on the cards. 
+- (However formkit/vue-formulate) should not be used if you are displaying information from a database, alter it, and saving it back to a database
+
 

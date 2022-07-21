@@ -12,7 +12,8 @@
       "attrs": {
         "placeholder": "Your Full Name",
         "title": "Please enter your full name"
-      }
+      },
+      "data-class": "form-control"
     },
     "email": {
       "type": "string",

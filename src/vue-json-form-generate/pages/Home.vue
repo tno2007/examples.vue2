@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import { reactive } from "@vue/composition-api";
+import { computed, reactive, ref } from "@vue/composition-api";
 import FormSchema from "@formschema/native";
 import schema from "../schema/newsletter.json";
 import Ajv from "ajv";
+
+const refFormSchema = ref(null);
 
 const data = reactive({
   schema: {
@@ -12,10 +14,6 @@ const data = reactive({
         title: "First name",
         type: "string",
         minLength: 5,
-        attrs: {
-          class: "form-control",
-          a: "b",
-        },
       },
       password: {
         title: "Password",
@@ -33,20 +31,33 @@ const data = reactive({
   ajv: new Ajv({ allErrors: true }),
 });
 
+const validate = computed(() => {
+  return data.ajv.compile(data.schema);
+});
+
 function submit(submission: any) {
   console.log(submission);
 }
 
 const validator = (field: any) => {
+  console.log("data.ajv", data.ajv);
   console.log("field", field);
+  console.log("refFormSchema", refFormSchema);
 
   // Clear all messages
   field.clearMessages(true);
 
-  if (!this.validate(field.value)) {
-    this.validate.errors.forEach(({ dataPath, message }) => {
+  if (!validate.value(field.value)) {
+    if (!validate || !validate.value || !validate.value.errors) return;
+
+    validate.value.errors.forEach((e) => {
+      e.schemaPath;
+      console.log("e.schemaPath", e.schemaPath);
+    });
+
+    validate.value.errors.forEach(({ schemaPath, message }) => {
       const errorField = field.hasChildren
-        ? field.getField(dataPath) || field
+        ? field.getField(schemaPath) || field
         : field;
 
       /**
@@ -73,6 +84,7 @@ const validator = (field: any) => {
 <template>
   <div class="container py-4">
     <FormSchema
+      ref="refFormSchema"
       :schema="schema"
       v-model="data.model"
       :validator="validator"
@@ -81,7 +93,39 @@ const validator = (field: any) => {
       <button type="submit">Subscribe</button>
     </FormSchema>
     <pre>{{ data.model }}</pre>
+    <div class="mb-3">
+      <label for="exampleFormControlInput1" class="form-label"
+        >Email address</label
+      >
+      <input
+        type="email"
+        class="form-control"
+        id="exampleFormControlInput1"
+        placeholder="name@example.com"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="exampleFormControlInput1" class="form-label"
+        >Email address</label
+      >
+      <input
+        type="email"
+        class="form-control"
+        id="exampleFormControlInput1"
+        placeholder="name@example.com"
+      />
+    </div>
   </div>
 </template>
 
-<style lang="scss"></style>
+<style lang="scss">
+@import "../node_modules/bootstrap/scss/bootstrap";
+
+label {
+  @extend .form-label !optional;
+}
+
+input[type="text"] {
+  @extend .form-control !optional;
+}
+</style>
