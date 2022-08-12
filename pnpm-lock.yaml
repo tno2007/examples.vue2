@@ -24,6 +24,7 @@ specifiers:
   pinia: ^2.0.11
   postcss: ^8.4.14
   sass: ^1.53.0
+  scripty: ^2.1.0
   typescript: ~4.7.3
   unplugin-vue2-script-setup: ^0.9.3
   vite: ^2.8.4
@@ -32,6 +33,7 @@ specifiers:
   vue: ^2.6.14
   vue-form-generator: ^2.3.4
   vue-form-json-schema: ^2.9.5
+  vue-multiselect: ^2.1.6
   vue-step-progress: ^0.3.7
   vue-template-babel-compiler: ^1.2.0
   vue-template-compiler: ^2.6.14
@@ -59,6 +61,7 @@ dependencies:
   vue: 2.6.14
   vue-form-generator: 2.3.4
   vue-form-json-schema: 2.9.5_vue@2.6.14
+  vue-multiselect: 2.1.6
   vue-step-progress: 0.3.7
   windicss: 3.5.6
 
@@ -70,6 +73,7 @@ devDependencies:
   autoprefixer: 10.4.7_postcss@8.4.14
   postcss: 8.4.14
   sass: 1.53.0
+  scripty: 2.1.0
   typescript: 4.7.4
   unplugin-vue2-script-setup: 0.9.3_nqvzdnqx5zr4xtlg4xupk3ocm4
   vite: 2.9.12_sass@1.53.0
@@ -1058,6 +1062,12 @@ packages:
     dependencies:
       normalize-path: 3.0.0
       picomatch: 2.3.1
+
+  /async/2.6.4:
+    resolution: {integrity: sha512-mzo5dfJYwAn29PeiJ0zvwTo04zj8HDJj0Mn8TD7sno7q12prdbnasKJHhkm2c1LgrhlJ0teaea8860oxi51mGA==}
+    dependencies:
+      lodash: 4.17.21
+    dev: true
 
   /at-least-node/1.0.0:
     resolution: {integrity: sha512-+q/t7Ekv1EDY2l6Gda6LLiX14rU9TV20Wa3ofeQmwPFZbOMo9DXrLbOjFaaclkXKWidIaopwAObQDqwWtGUjqg==}
@@ -2230,6 +2240,18 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: false
 
+  /resolve-from/2.0.0:
+    resolution: {integrity: sha512-qpFcKaXsq8+oRoLilkwyc7zHGF5i9Q2/25NIgLQQ/+VVv9rU4qvr6nXVAw1DsnXJyQkZsR4Ytfbtg5ehfcUssQ==}
+    engines: {node: '>=0.10.0'}
+    dev: true
+
+  /resolve-pkg/1.0.0:
+    resolution: {integrity: sha512-L0/+vjdV3UjcQaXRlQcObpCyySS8GEqVNYGYRDAGlYOcw4J1y33WMIAD3XvYWIPnBeyN5Ilp5RHoifs3gR1S2g==}
+    engines: {node: '>=4'}
+    dependencies:
+      resolve-from: 2.0.0
+    dev: true
+
   /resolve/1.22.1:
     resolution: {integrity: sha512-nBpuuYuY5jFsli/JIs1oldw6fOQCBioohqWZg/2hiaOybXOft4lonv85uDOKXdf8rhyK159cxU5cDcK/NKk8zw==}
     hasBin: true
@@ -2268,6 +2290,16 @@ packages:
       chokidar: 3.5.3
       immutable: 4.1.0
       source-map-js: 1.0.2
+
+  /scripty/2.1.0:
+    resolution: {integrity: sha512-vvp8DWmLyIyesQYjxTh5cH3odsf1+srXKJUhrgXjhEk32RqcGkjqTEuKLyBCoBH4k6WdzF2uYpr4zi6ih4xgOA==}
+    hasBin: true
+    dependencies:
+      async: 2.6.4
+      glob: 7.2.3
+      lodash: 4.17.21
+      resolve-pkg: 1.0.0
+    dev: true
 
   /semver/6.3.0:
     resolution: {integrity: sha512-b39TBaTSfV6yBrapU89p5fKekE2m/NwnDocOVruQFS1/veMgdzuPcnOM34M6CwxW8jH/lxEa5rBoDeUwu5HHTw==}
@@ -2569,6 +2601,11 @@ packages:
       ajv: 6.12.6
       lodash: 4.17.21
       vue: 2.6.14
+    dev: false
+
+  /vue-multiselect/2.1.6:
+    resolution: {integrity: sha512-s7jmZPlm9FeueJg1RwJtnE9KNPtME/7C8uRWSfp9/yEN4M8XcS/d+bddoyVwVnvFyRh9msFo0HWeW0vTL8Qv+w==}
+    engines: {node: '>= 4.0.0', npm: '>= 3.0.0'}
     dev: false
 
   /vue-step-progress/0.3.7:

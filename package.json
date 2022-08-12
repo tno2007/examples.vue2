@@ -6,9 +6,12 @@
     "vue-formulate-explore": "vite serve ./src/vue-formulate-explore",
     "vue-form-generator": "vite serve ./src/vue-form-generator",
     "vue-json-form-generate": "vite serve ./src/vue-json-form-generate",
+    "vue-multiselect-onmounted": "vite serve ./src/vue-multiselect-onmounted",
     "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview --port 5050",
-    "typecheck": "vue-tsc --noEmit"
+    "typecheck": "vue-tsc --noEmit",
+    "vue-project-template": "scripty",
+    "vfg-repeatable-field": "scripty"
   },
   "dependencies": {
     "@braid/vue-formulate": "^2.5.3",
@@ -31,6 +34,7 @@
     "vue": "^2.6.14",
     "vue-form-generator": "^2.3.4",
     "vue-form-json-schema": "^2.9.5",
+    "vue-multiselect": "^2.1.6",
     "vue-step-progress": "^0.3.7",
     "windicss": "^3.5.6"
   },
@@ -42,6 +46,7 @@
     "autoprefixer": "^10.4.7",
     "postcss": "^8.4.14",
     "sass": "^1.53.0",
+    "scripty": "^2.1.0",
     "typescript": "~4.7.3",
     "unplugin-vue2-script-setup": "^0.9.3",
     "vite": "^2.8.4",
