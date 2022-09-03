@@ -113,7 +113,7 @@ export default defineComponent({
             type: "textarea",
             name: "criminalrecordmoreinfo",
             label: "Please provide details:",
-            if: "$get(contact.criminalrecord)",
+            visible: {},
           },
         ],
       },

@@ -25,5 +25,5 @@ export interface ISchema {
   validation?: string;
   options?: ISchemaOption[];
   format?: "date";
-  visible?: boolean;
+  visible?: boolean | object;
 }
