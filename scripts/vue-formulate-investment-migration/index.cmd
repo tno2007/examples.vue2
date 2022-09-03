@@ -1,0 +1,1 @@
+vite serve ./src/vue-formulate-investment-migration --port 3011 --open
