@@ -11,7 +11,8 @@
     "preview": "vite preview --port 5050",
     "typecheck": "vue-tsc --noEmit",
     "vue-project-template": "scripty",
-    "vfg-repeatable-field": "scripty"
+    "vfg-repeatable-field": "scripty",
+    "vue-formulate-investment-migration": "scripty"
   },
   "dependencies": {
     "@braid/vue-formulate": "^2.5.3",

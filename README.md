@@ -1,35 +1,81 @@
-# app1
+# examples.vue2
 
-This template should help get you started developing with Vue 2 in Vite.
+Repo holds a collection of vue 2 projects written with vite, to act as a transition to using modern Vue 2 build tools.
 
-## Recommended IDE Setup
+Below describes these projects
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=johnsoncodehk.volar) (and disable Vetur).
+## vfg-repeatable-field
 
-## Type Support for `.vue` Imports in TS
+---
 
-Since TypeScript cannot handle type information for `.vue` imports, they are shimmed to be a generic Vue component type by default. In most cases this is fine if you don't really care about component prop types outside of templates.
+A work in progress for creating a repeatable field for use with vue-form-generator (vfg).
 
-However, if you wish to get actual prop types in `.vue` imports (for example to get props validation when using manual `h(...)` calls), you can run `Volar: Switch TS Plugin on/off` from VSCode command palette.
+Since most of the forms on the website is built using vfg, I want to extend the functionality to include a repeatable field.
 
-## Customize configuration
+I love vfg for the fact that I can...
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+- use json/javascript to generate forms
+- it does not force me to change the structure of my model variables, like it is with vue-formulate (vf). For eg. I can manipulate a single field in an object by specifying its model, using dot-syntax, like so:
 
-## Project Setup
+```json
+// code
+{
+    "label": "First name",
+    "model": "lead.firstname"
+}
 
-```sh
-npm install
+// model
+{
+  "lead": {
+    "firstname": "John",
+    "lastname": "Denver"
+  }
+}
 ```
 
-### Compile and Hot-Reload for Development
+But, with vf, I am forced to first structure my markup like this:
 
-```sh
-npm run dev
+```html
+<FormulateInput type="group" name="lead">
+  <FormulateInput type="text" name="firstname" label="First name:" />
+</FormulateInput>
 ```
 
-### Type-Check, Compile and Minify for Production
+Then when I change first name, the model will be updated.
 
-```sh
-npm run build
+I am not able to to this... (I cannot use dot-syntax inside the name attribute)
+
+```html
+<FormulateInput type="text" name="lead.firstname" label="First name:" />
+<FormulateInput type="text" name="lead.lastname" label="Last name:" />
+```
+
+With vf, I kind of forced to use markup, as opposed to json, because with vf json I cannot label the repeatable items like this...
+
+```json
+{
+  "type": "group",
+  "children": [
+    {
+      "type": "text",
+      "name": "firstname"
+    },
+    {
+      "type": "text",
+      "name": "lastname"
+    }
+  ]
+}
+
+/*
+What i mean is, you cannot label the repeated items like this with values from somewhere else 
+
+Child 1 - alex jae sdafsagvsdf
+    name: alex
+    surname: jae sdafsagvsdf
+    
+Child 2 - john denver
+    name: john
+    surname: denver
+*/
 ```
