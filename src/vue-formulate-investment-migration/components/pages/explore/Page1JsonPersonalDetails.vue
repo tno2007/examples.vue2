@@ -12,6 +12,8 @@ import {
 } from "@vue/composition-api";
 import collections from "../../../data/explore/collections";
 
+import jsonLogic from "json-logic-js";
+
 export default defineComponent({
   name: "Page1JsonPersonalDetails",
   components: {},
@@ -113,7 +115,8 @@ export default defineComponent({
             type: "textarea",
             name: "criminalrecordmoreinfo",
             label: "Please provide details:",
-            if: "$get(contact.criminalrecord)",
+            //visible: "",
+            //if: "$get(contact.criminalrecord)",
           },
         ],
       },
@@ -234,6 +237,8 @@ export default defineComponent({
         return typeof a.visible === "undefined" || a.visible;
       });
     });
+
+    jsonLogic.apply();
 
     return {
       formRef,
