@@ -1,5 +1,4 @@
 <script lang="ts">
-import { filledIn } from "../../../common/composables/useFormHelper";
 import { IModel } from "../../../common/typings/explore";
 import {
   defineComponent,
@@ -10,10 +9,13 @@ import {
   ref,
 } from "@vue/composition-api";
 import collections from "../../../data/explore/collections";
+import TransitionExpand from "../../transitions/TransitionExpand.vue";
 
 export default defineComponent({
   name: "Page1PersonalDetails",
-  components: {},
+  components: {
+    TransitionExpand,
+  },
   props: {
     modelProp: {
       type: Object as PropType<IModel>,
@@ -23,63 +25,83 @@ export default defineComponent({
   },
   setup(props, context) {
     const formRef: any = ref(null);
+    const submitRef: any = ref(null);
+    const fiRef: any = ref();
 
     const data = reactive({
       model: {} as any,
+      collections: {
+        maritalStatus: [] as any[],
+      },
     });
-
-    const v = (val: any) => {
-      return val == null || val == "";
-    };
-
-    const isSectionComplete = async () => {
-      var value =
-        filledIn(data.model.PrimaryApplicant[0].PreferredTitle) &&
-        filledIn(data.model.PrimaryApplicant[0].FirstName) &&
-        filledIn(data.model.PrimaryApplicant[0].LastName);
-
-      context.emit("isSectionComplete", value);
-    };
 
     const handleSubmit = async (data: any) => {
       context.emit("handleSubmit", data);
     };
 
+    interface IValidation {
+      errors: any[];
+      hasErrors: boolean;
+      name: string;
+    }
+
+    const validation = async (validation: IValidation) => {
+      //console.log("b", validation);
+    };
+
+    //console.log("data.model", data.model);
+
+    data.model = props.modelProp;
+
+    //console.log("data.model", data.model);
+
     onMounted(async () => {
-      await nextTick();
-      data.model = props.modelProp;
-      //context.emit("isSectionComplete", isSectionComplete());
-      await isSectionComplete();
+      // await nextTick();
+
+      fetch(
+        "https://dev-webservices.1stcontact.com/crmproxy/api/entities/contact/attributes/new_maritalstatus"
+      )
+        .then((response) => response.json())
+        .then((response) => {
+          const result: any[] = response.Result.OptionSet;
+          data.collections.maritalStatus = result.map(
+            ({ Key: label, Value: value }) => ({ label, value })
+          );
+          //console.log(data.collections.maritalStatus);
+        });
+
+      //await isSectionComplete();
     });
 
     return {
       formRef,
+      submitRef,
       collections,
       data,
       handleSubmit,
+      validation,
     };
   },
 });
 </script>
 
 <template>
-  <FormulateForm v-model="data.model" @submit="handleSubmit" ref="formRef">
-    <h5 class="pt-3">Primary applicant</h5>
+  <FormulateForm
+    name="myForm"
+    v-model="data.model"
+    @submit="handleSubmit"
+    ref="formRef"
+    @validation="validation"
+  >
+    <h5 class="pt-3">Personal details (Main applicant)</h5>
     <FormulateInput type="group" name="PrimaryApplicant">
-      <FormulateInput
-        type="select"
-        name="PreferredTitle"
-        label="Title:"
-        :options="collections.PrimaryApplicant.Title"
-        :validation="[['required']]"
-        placeholder="-- Select --"
-      />
       <FormulateInput
         type="text"
         name="FirstName"
-        label="First Name:"
+        label="First name (as seen in passport):"
         :validation="[['required']]"
       />
+      <FormulateInput type="text" name="MiddleName" label="Middle name:" />
       <FormulateInput
         type="text"
         name="LastName"
@@ -87,11 +109,16 @@ export default defineComponent({
         :validation="[['required']]"
       />
       <FormulateInput
-        type="select"
-        name="Gender"
-        label="Gender:"
-        :options="collections.PrimaryApplicant.Gender"
-        placeholder="-- Select --"
+        type="text"
+        name="LastName"
+        label="Passport number:"
+        :validation="[['required']]"
+      />
+      <FormulateInput
+        type="yearmonthday"
+        name="PassportExpiryDate"
+        label="Passport expiry date:"
+        :validation="[['required']]"
       />
       <FormulateInput
         type="yearmonthday"
@@ -102,139 +129,47 @@ export default defineComponent({
           required: 'Please complete all date fields',
         }"
       />
-    </FormulateInput>
-
-    <FormulateInput
-      type="checkbox"
-      name="HavePartner"
-      label="Do you have a partner?"
-    />
-
-    <div v-if="data.model.HavePartner" class="mb-5">
-      <h5 class="pt-3">Partner</h5>
-      <FormulateInput type="group" name="Partner" #default="{ index }">
-        <FormulateInput
-          type="select"
-          name="PreferredTitle"
-          label="Title:"
-          :options="collections.Partner.Title"
-          :validation="[['required']]"
-          placeholder="-- Select --"
-        />
-        <FormulateInput
-          type="text"
-          name="FirstName"
-          label="First Name:"
-          :validation="[['required']]"
-        />
-        <FormulateInput
-          type="text"
-          name="LastName"
-          label="Last Name:"
-          :validation="[['required']]"
-        />
-        <FormulateInput
-          type="select"
-          name="Gender"
-          label="Gender:"
-          :options="collections.Partner.Gender"
-          :validation="[['required']]"
-          placeholder="-- Select --"
-        />
-
-        <FormulateInput
-          type="yearmonthday"
-          name="DateOfBirth"
-          label="Date of birth"
-          :validation="[['required']]"
-          format="date"
-          :validation-messages="{
-            required: 'Please complete all date fields',
-          }"
-        />
-        <FormulateInput
-          type="select"
-          name="MaritalStatus"
-          label="Marital status:"
-          :options="collections.Partner.MaritalStatus"
-          placeholder="-- Select --"
-        />
-        <div
-          v-if="
-            data.model.Partner &&
-            data.model.Partner[index] &&
-            data.model.Partner[index].MaritalStatus == `2`
-          "
-        >
-          <FormulateInput
-            type="yearmonthday"
-            name="DateOfMarriage"
-            label="Date of marriage"
-            :validation="[['required']]"
-            format="date"
-            :validation-messages="{
-              required: 'Please complete all date fields',
-            }"
-          />
-        </div>
-      </FormulateInput>
-    </div>
-
-    <FormulateInput
-      type="checkbox"
-      name="HaveChildren"
-      label="Do you have dependents?"
-    />
-
-    <div v-if="data.model.HaveChildren" class="mb-5">
-      <h5 class="pt-3">Dependents</h5>
       <FormulateInput
-        type="group"
-        name="Dependents"
-        #default="{ index }"
-        add-label="+ Add dependent"
-        :repeatable="true"
-      >
-        <h5 class="pt-2 pb-2">Dependent {{ index + 1 }}</h5>
+        type="radio"
+        name="Gender"
+        label="Gender:"
+        :options="collections.Gender"
+        :validation="[['required']]"
+      />
+      <FormulateInput
+        type="radio"
+        name="CriminalRecord"
+        label="Do you have a criminal record?"
+        :options="collections.Boolean"
+        :validation="[['required']]"
+      />
+      <TransitionExpand>
         <FormulateInput
-          type="text"
-          name="FirstName"
-          label="First Name:"
+          type="textarea"
+          name="CriminalRecordMoreInfo"
+          label="Please provide more detail:"
           :validation="[['required']]"
+          v-if="data.model.PrimaryApplicant[0].CriminalRecord === 'true'"
         />
-        <FormulateInput
-          type="text"
-          name="LastName"
-          label="Last Name:"
-          :validation="[['required']]"
-        />
-        <FormulateInput
-          type="select"
-          name="Gender"
-          label="Gender:"
-          :options="collections.Dependents.Gender"
-          :validation="[['required']]"
-          placeholder="-- Select --"
-        />
-        <FormulateInput
-          type="yearmonthday"
-          name="DateOfBirth"
-          label="Date of birth"
-          :validation="[['required']]"
-          format="date"
-          :validation-messages="{
-            required: 'Please complete all date fields',
-          }"
-        />
-        <FormulateInput
-          type="select"
-          name="SpecialAttributes"
-          label="Special attributes:"
-          :options="collections.Dependents.SpecialAttributes"
-          :validation="[['required']]"
-          placeholder="-- Select --"
-        />
-      </FormulateInput>
+      </TransitionExpand>
+      <!--
+        # MaritalStatus
+        https://dev-webservices.1stcontact.com/crmproxy/api/entities/contact/attributes/new_maritalstatus
+      -->
+      <FormulateInput
+        type="radio"
+        name="MaritalStatus"
+        label="Please indicate your marital status"
+        :options="data.collections.maritalStatus"
+        :validation="[['required']]"
+      />
+      <!--
+      <FormulateInput ref="submitRef" type="submit" label="Click me" />        
+      -->
+    </FormulateInput>
+    <div>
+      <span>data model</span>
+      <pre>{{ data.model }}</pre>
     </div>
   </FormulateForm>
 </template>
