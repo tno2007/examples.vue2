@@ -78,7 +78,7 @@ import {
   watch,
   onMounted,
   nextTick,
-} from "@vue/composition-api";
+} from "vue";
 import { formatISO } from "date-fns";
 import { utcToZonedTime } from "date-fns-tz";
 

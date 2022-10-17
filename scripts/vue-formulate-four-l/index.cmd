@@ -1,1 +1,1 @@
-vite serve ./src/vue-formulate-four-l --port 3014 --open
+vite serve ./src/vue-formulate-four-l --port 3014

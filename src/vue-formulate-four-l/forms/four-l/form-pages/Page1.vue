@@ -1,19 +1,12 @@
 <script lang="ts">
 import { IModel } from "../../../common/typings/explore";
-import {
-  defineComponent,
-  onMounted,
-  PropType,
-  reactive,
-  ref,
-} from "@vue/composition-api";
-import collections from "../../../data/explore/collections";
-import TransitionExpand from "../../../components/transitions/TransitionExpand.vue";
+import { defineComponent, onMounted, PropType, reactive, ref } from "vue";
+//import TransitionExpand from "../../../components/transitions/TransitionExpand.vue";
 
 export default defineComponent({
   name: "Page1",
   components: {
-    TransitionExpand,
+    //TransitionExpand,
   },
   props: {
     modelProp: {
@@ -25,7 +18,6 @@ export default defineComponent({
   setup(props, context) {
     const formRef: any = ref(null);
     const submitRef: any = ref(null);
-    const fiRef: any = ref();
 
     const data = reactive({
       model: {} as any,
@@ -44,19 +36,11 @@ export default defineComponent({
       name: string;
     }
 
-    const validation = async (validation: IValidation) => {
-      //console.log("b", validation);
-    };
-
-    //console.log("data.model", data.model);
+    const validation = async (validation: IValidation) => {};
 
     data.model = props.modelProp;
 
-    //console.log("data.model", data.model);
-
     onMounted(async () => {
-      // await nextTick();
-
       fetch(
         "https://dev-webservices.1stcontact.com/crmproxy/api/entities/contact/attributes/new_maritalstatus"
       )
@@ -66,16 +50,12 @@ export default defineComponent({
           data.collections.maritalStatus = result.map(
             ({ Key: label, Value: value }) => ({ label, value })
           );
-          //console.log(data.collections.maritalStatus);
         });
-
-      //await isSectionComplete();
     });
 
     return {
       formRef,
       submitRef,
-      collections,
       data,
       handleSubmit,
       validation,
@@ -132,17 +112,25 @@ export default defineComponent({
         type="radio"
         name="Gender"
         label="Gender:"
-        :options="collections.Gender"
         :validation="[['required']]"
       />
       <FormulateInput
         type="radio"
         name="CriminalRecord"
         label="Do you have a criminal record?"
-        :options="collections.Boolean"
         :validation="[['required']]"
+        :options="[
+          {
+            label: 'Yes',
+            value: 'true',
+          },
+          {
+            label: 'No',
+            value: 'false',
+          },
+        ]"
       />
-      <TransitionExpand>
+      <transition-expand>
         <FormulateInput
           type="textarea"
           name="CriminalRecordMoreInfo"
@@ -150,11 +138,7 @@ export default defineComponent({
           :validation="[['required']]"
           v-if="data.model.PrimaryApplicant[0].CriminalRecord === 'true'"
         />
-      </TransitionExpand>
-      <!--
-        # MaritalStatus
-        https://dev-webservices.1stcontact.com/crmproxy/api/entities/contact/attributes/new_maritalstatus
-      -->
+      </transition-expand>
       <FormulateInput
         type="radio"
         name="MaritalStatus"
@@ -162,9 +146,6 @@ export default defineComponent({
         :options="data.collections.maritalStatus"
         :validation="[['required']]"
       />
-      <!--
-      <FormulateInput ref="submitRef" type="submit" label="Click me" />        
-      -->
     </FormulateInput>
     <div>
       <span>data model</span>

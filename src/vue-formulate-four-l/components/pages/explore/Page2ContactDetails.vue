@@ -6,7 +6,7 @@ import {
   PropType,
   reactive,
   ref,
-} from "@vue/composition-api";
+} from "vue";
 import { IModel } from "../../../common/typings/explore";
 import collections from "../../../data/explore/collections";
 

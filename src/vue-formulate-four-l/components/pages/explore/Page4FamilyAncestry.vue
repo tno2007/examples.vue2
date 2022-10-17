@@ -1,13 +1,12 @@
 <script lang="ts">
 import {
-  computed,
   defineComponent,
   nextTick,
   onMounted,
   PropType,
   reactive,
   ref,
-} from "@vue/composition-api";
+} from "vue";
 import { getObjectValue } from "../../../common/composables/useFormHelper";
 import { IModel } from "../../../common/typings/explore";
 import collections from "../../../data/explore/collections";

@@ -1,36 +1,42 @@
 <script lang="ts">
-import {
-  onMounted,
-  ref,
-  defineComponent,
-  reactive,
-  computed,
-} from "@vue/composition-api";
+import { onMounted, ref, defineComponent, reactive, computed } from "vue";
 import { useAppStore } from "../../stores/appStore";
 import Page1 from "./form-pages/Page1.vue";
 import Page2 from "./form-pages/Page2.vue";
 import { toVueFormulateFormat } from "../../common/composables/useFormHelper";
-
-import axios, { AxiosError, AxiosResponse } from "axios";
+//import {   } from "@morev/vue-transitions";
 
 export default defineComponent({
   components: {
     Page1,
+    Page2,
   },
   setup(props, context) {
     const store = useAppStore();
 
     const data = reactive({
-      questionnaireComplete: true,
+      questionnaireComplete: false,
       tabs: [
         {
           label: "Address history",
           componentName: "Page1",
-          active: true,
+          active: false,
           completed: false,
         },
         {
           label: "Details of your partner",
+          componentName: "Page2",
+          active: true,
+          completed: false,
+        },
+        {
+          label: "Referees and identity",
+          componentName: "Page2",
+          active: false,
+          completed: false,
+        },
+        {
+          label: "Biometric enrolment",
           componentName: "Page2",
           active: false,
           completed: false,
@@ -50,12 +56,8 @@ export default defineComponent({
     );
 
     const appRef = ref<any>(null);
-    const r = ref<HTMLElement | null>(null);
-    const formRef = ref<any>(null);
 
     const model = ref<any>();
-
-    const activePage = "Page1PersonalDetails";
 
     const isSectionComplete = async (isComplete: boolean) => {
       console.log("isSectionComplete", isComplete);
@@ -93,10 +95,14 @@ export default defineComponent({
       */
     };
 
-    //store.formModel.PrimaryApplicant.CriminalRecord = "true";
+    console.log("store.formModel", store.formModel);
 
-    model.value = toVueFormulateFormat(store.formModel, ["PrimaryApplicant"]);
-    console.log("Formulate-model.value", model.value);
+    store.formModel.PrimaryApplicant.CriminalRecord = "true";
+
+    model.value = toVueFormulateFormat(store.formModel, [
+      "PrimaryApplicant",
+      "Partner",
+    ]);
 
     onMounted(() => {
       // TODO: re-add explore and primary-applicant
@@ -104,13 +110,13 @@ export default defineComponent({
     return {
       data,
       Page1,
+      Page2,
       handleSubmit,
       isSectionComplete,
       nextClick,
       model,
       appRef,
       tabClick,
-
       activeComponent,
     };
   },
@@ -142,14 +148,16 @@ export default defineComponent({
 
     <!-- sections -->
     <fieldset :disabled="data.questionnaireComplete">
-      <component
-        :is="activeComponent"
-        ref="appRef"
-        @handleSubmit="handleSubmit"
-        @isSectionComplete="isSectionComplete"
-        :modelProp="model"
-      >
-      </component>
+      <transition-fade>
+        <component
+          :is="activeComponent"
+          ref="appRef"
+          @handleSubmit="handleSubmit"
+          @isSectionComplete="isSectionComplete"
+          :modelProp="model"
+        >
+        </component>
+      </transition-fade>
     </fieldset>
 
     <button @click="nextClick" class="col btn btn-secondary ml-2">

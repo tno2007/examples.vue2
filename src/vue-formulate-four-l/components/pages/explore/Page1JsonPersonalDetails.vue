@@ -9,7 +9,7 @@ import {
   reactive,
   ref,
   watch,
-} from "@vue/composition-api";
+} from "vue";
 import collections from "../../../data/explore/collections";
 
 import jsonLogic from "json-logic-js";

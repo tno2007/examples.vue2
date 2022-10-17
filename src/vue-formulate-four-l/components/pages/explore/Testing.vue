@@ -27,7 +27,7 @@ import {
   ref,
   nextTick,
   computed,
-} from "@vue/composition-api";
+} from "vue";
 import { IModel } from "../../../common/typings/explore";
 import { getObjectValue as g } from "../../../common/composables/useFormHelper";
 import collections from "../../../data/explore/collections";

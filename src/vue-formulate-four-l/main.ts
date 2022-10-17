@@ -1,9 +1,7 @@
 import Vue from "vue";
-import VueCompositionAPI, { createApp, h } from "@vue/composition-api";
 import { createPinia, PiniaVuePlugin } from "pinia";
-import App from "./App.vue";
 
-Vue.use(VueCompositionAPI);
+import App from "./App.vue";
 
 import VueFormulate from "@braid/vue-formulate";
 import "@braid/vue-formulate/themes/snow/snow.scss";
@@ -11,8 +9,7 @@ import "@braid/vue-formulate/themes/snow/snow.scss";
 import YearMonthDayFormulateInput from "./components/common/vf/custom/src/inputs/YearMonthDayFormulateInput.vue";
 Vue.component("YearMonthDayFormulateInput", YearMonthDayFormulateInput);
 
-//import CustomGroupFormulateInput from "./components/common/vf/custom/src/inputs/FormulateInputGroup.vue";
-//Vue.component("CustomGroupFormulateInput", CustomGroupFormulateInput);
+Vue.use(PiniaVuePlugin);
 
 Vue.use(VueFormulate, {
   locales: {
@@ -37,6 +34,10 @@ Vue.use(VueFormulate, {
   },
 });
 
+import VueTransitions from "@morev/vue-transitions";
+import "@morev/vue-transitions/styles";
+Vue.use(VueTransitions);
+
 // fa icons
 import "../fa-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
@@ -44,16 +45,7 @@ Vue.component("fa-icon", FontAwesomeIcon);
 
 import "vue-step-progress/dist/main.css";
 
-const app = createApp({
+new Vue({
   pinia: createPinia(),
-  render: () => h(App),
-});
-
-app.use(PiniaVuePlugin);
-
-app.mount("#app");
-
-console.log(app);
-
-const i = 2009;
-let yearPadded = i.toString().padStart(4, "0");
+  render: (h) => h(App),
+}).$mount("#app");

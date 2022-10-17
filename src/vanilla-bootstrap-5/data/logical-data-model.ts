@@ -34,7 +34,7 @@ export const logicalDataModel = {
     EmailHome: "lyall.vanderlinde@iriesoft.net",
     EmailWork: "michael.hayn@sableinternational.com",
     PassportCountry: 5478,
-    PassportNumber: "ytrewq4321",
+    PassportNumber: "",
     AdditionalPassports: [
       {
         Id: "4bdd27f2-d9e0-ec11-a403-005056011ae9",
