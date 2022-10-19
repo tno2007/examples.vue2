@@ -1,19 +1,23 @@
 <script lang="ts">
 import { onMounted, ref, defineComponent, reactive, computed } from "vue";
 import { useAppStore } from "../../stores/appStore";
-import Page1 from "./form-pages/Page1.vue";
-import Page2 from "./form-pages/Page2.vue";
-import Page3 from "./form-pages/Page3.vue";
-import Page4 from "./form-pages/Page4.vue";
+
+import AdminPortalConsultantLogin from "./portal/AdminPortalConsultantLogin.vue";
+import ForgotPassword from "./portal/ForgotPassword.vue";
+import Login from "./portal/Login.vue";
+import Profile from "./portal/Profile.vue";
+import ReportAProblem from "./portal/ReportAProblem.vue";
+import ResetPassword from "./portal/ResetPassword.vue";
 import { toVueFormulateFormat } from "../../common/composables/useFormHelper";
-//import {   } from "@morev/vue-transitions";
 
 export default defineComponent({
   components: {
-    Page1,
-    Page2,
-    Page3,
-    Page4,
+    AdminPortalConsultantLogin,
+    ForgotPassword,
+    Login,
+    Profile,
+    ReportAProblem,
+    ResetPassword,
   },
   setup(props, context) {
     const store = useAppStore();
@@ -22,26 +26,38 @@ export default defineComponent({
       questionnaireComplete: false,
       tabs: [
         {
-          label: "Address history",
-          componentName: "Page1",
+          label: "AdminPortalConsultantLogin",
+          componentName: "AdminPortalConsultantLogin",
           active: true,
           completed: false,
         },
         {
-          label: "Details of your partner",
-          componentName: "Page2",
+          label: "ForgotPassword",
+          componentName: "ForgotPassword",
           active: false,
           completed: false,
         },
         {
-          label: "Referees and identity",
-          componentName: "Page3",
+          label: "Login",
+          componentName: "Login",
           active: false,
           completed: false,
         },
         {
-          label: "Biometric enrolment",
-          componentName: "Page4",
+          label: "Profile",
+          componentName: "Profile",
+          active: false,
+          completed: false,
+        },
+        {
+          label: "ReportAProblem",
+          componentName: "ReportAProblem",
+          active: false,
+          completed: false,
+        },
+        {
+          label: "ResetPassword",
+          componentName: "ResetPassword",
           active: false,
           completed: false,
         },
@@ -84,7 +100,7 @@ export default defineComponent({
 
       //const formRef = appRef.value.$refs.formRef;
       const formRef = appRef.value.formRef;
-      //console.log("formRef", formRef);
+      console.log("formRef", formRef);
       const valid = formRef.formSubmitted();
 
       /*
@@ -108,11 +124,12 @@ export default defineComponent({
       "Partner",
     ]);
 
-    onMounted(() => {});
+    onMounted(() => {
+      // TODO: re-add explore and primary-applicant
+    });
     return {
       data,
-      Page1,
-      Page2,
+      Login,
       handleSubmit,
       isSectionComplete,
       nextClick,
@@ -149,7 +166,7 @@ export default defineComponent({
     <!--/tabs -->
 
     <!-- sections -->
-    <fieldset :disabled="data.questionnaireComplete" class="mt-4">
+    <fieldset :disabled="data.questionnaireComplete" class="pt-5">
       <transition-fade>
         <component
           :is="activeComponent"
@@ -162,7 +179,7 @@ export default defineComponent({
       </transition-fade>
     </fieldset>
 
-    <button @click="nextClick" class="col btn btn-primary ml-2" v-if="false">
+    <button @click="nextClick" class="col btn btn-secondary ml-2">
       Submit
     </button>
   </div>

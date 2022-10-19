@@ -1,7 +1,14 @@
 <script lang="ts">
 import { IModel } from "../../../common/typings/explore";
-import { defineComponent, onMounted, PropType, reactive, ref } from "vue";
-//import TransitionExpand from "../../../components/transitions/TransitionExpand.vue";
+import {
+  computed,
+  defineComponent,
+  onMounted,
+  PropType,
+  reactive,
+  ref,
+} from "vue";
+import { get, set } from "lodash";
 
 export default defineComponent({
   name: "Page1",
@@ -21,8 +28,112 @@ export default defineComponent({
 
     const data = reactive({
       model: {} as any,
+      schema: [
+        {
+          component: "h5",
+          children: "Please provide all your addresses for the past 5 years:",
+          class: "mb-4",
+        },
+        {
+          type: "group",
+          repeatable: true,
+          name: "AddressHistory",
+          addLabel: "+ Add address",
+          children: [
+            //{
+            //component: "h5",
+            //children: "Address 1",
+            //class: "mb-4",
+            //},
+            {
+              type: "yearmonthday",
+              name: "FromDate",
+              label: "From Date:",
+              validation: "^required",
+              validationMessages: {
+                required: "We need this information to assist you",
+              },
+            },
+            {
+              type: "yearmonthday",
+              name: "ToDate",
+              label: "To Date:",
+              validation: "^required",
+              validationMessages: {
+                required: "We need this information to assist you",
+              },
+            },
+            {
+              type: "select",
+              name: "Country",
+              label: "Country:",
+              validation: "^required",
+              validationMessages: {
+                required: "We need this information to assist you",
+              },
+              options: [],
+            },
+            {
+              type: "text",
+              name: "AddressLine1",
+              label: "Address:",
+              validation: "^required",
+              validationMessages: {
+                required: "We need this information to assist you",
+              },
+              placeholder: "Address line 1",
+            },
+            {
+              type: "text",
+              name: "AddressLine2",
+              validation: "^required",
+              validationMessages: {
+                required: "We need this information to assist you",
+              },
+              placeholder: "Address line 2",
+            },
+            {
+              type: "text",
+              name: "PostTownOrCity",
+              label: "Post town/City:",
+              validation: "^required",
+              validationMessages: {
+                required: "We need this information to assist you",
+              },
+            },
+            {
+              type: "text",
+              name: "StateOrProvince",
+              label: "State/Province:",
+              validation: "^required",
+              validationMessages: {
+                required: "We need this information to assist you",
+              },
+            },
+            {
+              type: "text",
+              name: "PostalCode",
+              label: "Postal code:",
+              validation: "^required",
+              validationMessages: {
+                required: "We need this information to assist you",
+              },
+            },
+          ],
+        },
+      ] as any,
       collections: {
-        maritalStatus: [] as any[],
+        boolean: [
+          {
+            label: "Yes",
+            value: "true",
+          },
+          {
+            label: "No",
+            value: "false",
+          },
+        ],
+        country: [] as any[],
       },
     });
 
@@ -40,16 +151,27 @@ export default defineComponent({
 
     data.model = props.modelProp;
 
+    const parsedSchema = computed(() => {
+      for (let index = 0; index < data.schema[1].children.length; index++) {
+        const child: any = data.schema[1].children[index];
+        child.children = `Address ${++index}`;
+        break;
+      }
+      return data.schema;
+    });
+
     onMounted(async () => {
       fetch(
-        "https://dev-webservices.1stcontact.com/crmproxy/api/entities/contact/attributes/new_maritalstatus"
+        "https://webservices.1stcontact.com/crmproxy/api/v2/entities/lead/attributes/new_country"
       )
         .then((response) => response.json())
         .then((response) => {
-          const result: any[] = response.Result.OptionSet;
-          data.collections.maritalStatus = result.map(
-            ({ Key: label, Value: value }) => ({ label, value })
-          );
+          const result: any[] = response.Result;
+          const options = result.map(({ Description: label, Code: value }) => ({
+            label,
+            value,
+          }));
+          data.schema[1].children[2].options = options;
         });
     });
 
@@ -59,97 +181,66 @@ export default defineComponent({
       data,
       handleSubmit,
       validation,
+      parsedSchema,
     };
   },
 });
 </script>
 
 <template>
-  <FormulateForm
-    name="myForm"
-    v-model="data.model"
-    @submit="handleSubmit"
-    ref="formRef"
-    @validation="validation"
-  >
-    <h5 class="pt-3">Personal details (Main applicant)</h5>
-    <FormulateInput type="group" name="PrimaryApplicant">
+  <div>
+    <FormulateForm v-model="data.model" @submit="handleSubmit" ref="formRef">
+      <h5 class="mb-4">
+        Please provide all your addresses for the past 5 years
+      </h5>
+
       <FormulateInput
-        type="text"
-        name="FirstName"
-        label="First name (as seen in passport):"
-        :validation="[['required']]"
-      />
-      <FormulateInput type="text" name="MiddleName" label="Middle name:" />
-      <FormulateInput
-        type="text"
-        name="LastName"
-        label="Last Name:"
-        :validation="[['required']]"
-      />
-      <FormulateInput
-        type="text"
-        name="LastName"
-        label="Passport number:"
-        :validation="[['required']]"
-      />
-      <FormulateInput
-        type="yearmonthday"
-        name="PassportExpiryDate"
-        label="Passport expiry date:"
-        :validation="[['required']]"
-      />
-      <FormulateInput
-        type="yearmonthday"
-        name="DateOfBirth"
-        label="Date of birth"
-        format="date"
-        :validation-messages="{
-          required: 'Please complete all date fields',
-        }"
-      />
-      <FormulateInput
-        type="radio"
-        name="Gender"
-        label="Gender:"
-        :validation="[['required']]"
-      />
-      <FormulateInput
-        type="radio"
-        name="CriminalRecord"
-        label="Do you have a criminal record?"
-        :validation="[['required']]"
-        :options="[
-          {
-            label: 'Yes',
-            value: 'true',
-          },
-          {
-            label: 'No',
-            value: 'false',
-          },
-        ]"
-      />
-      <transition-expand>
+        type="group"
+        :repeatable="true"
+        name="AddressHistory"
+        #default="{ index }"
+        add-label="+ Add address"
+      >
+        <h5 class="pt-2 pb-2">Address ({{ index + 1 }})</h5>
         <FormulateInput
-          type="textarea"
-          name="CriminalRecordMoreInfo"
-          label="Please provide more detail:"
+          type="select"
+          name="country"
+          label="Country:"
           :validation="[['required']]"
-          v-if="data.model.PrimaryApplicant[0].CriminalRecord === 'true'"
-        />
-      </transition-expand>
-      <FormulateInput
-        type="radio"
-        name="MaritalStatus"
-        label="Please indicate your marital status"
-        :options="data.collections.maritalStatus"
-        :validation="[['required']]"
-      />
-    </FormulateInput>
-    <div>
-      <span>data model</span>
-      <pre>{{ data.model }}</pre>
-    </div>
-  </FormulateForm>
+          :options="data.collections.country"
+        ></FormulateInput>
+        <FormulateInput
+          type="text"
+          name="addressline1"
+          label="Address:"
+          :validation="[['required']]"
+          placeholder="Address line 1"
+        ></FormulateInput>
+        <FormulateInput
+          type="text"
+          name="addressline2"
+          :validation="[['required']]"
+          placeholder="Address line 2"
+        ></FormulateInput>
+        <FormulateInput
+          type="text"
+          name="posttownorcity"
+          label="Post town / city:"
+          :validation="[['required']]"
+        ></FormulateInput>
+        <FormulateInput
+          type="text"
+          name="stateorprovince"
+          label="State / Province:"
+          :validation="[['required']]"
+        ></FormulateInput>
+        <FormulateInput
+          type="text"
+          name="postalcode"
+          label="Postal code:"
+          :validation="[['required']]"
+        ></FormulateInput>
+      </FormulateInput>
+    </FormulateForm>
+  </div>
 </template>

@@ -109,7 +109,7 @@ const app = defineComponent({
       updatedContextModel: false,
     });
 
-    const mixinContext: any = ctx;
+    const mixinContext: any = ctx.parent;
 
     const numberOfDays = (date: Date) => {
       return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
