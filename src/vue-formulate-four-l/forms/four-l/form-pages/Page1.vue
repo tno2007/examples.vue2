@@ -40,11 +40,11 @@ export default defineComponent({
           name: "AddressHistory",
           addLabel: "+ Add address",
           children: [
-            //{
-            //component: "h5",
-            //children: "Address 1",
-            //class: "mb-4",
-            //},
+            {
+              component: "h5",
+              children: "Address {{index}}",
+              class: "mb-4",
+            },
             {
               type: "yearmonthday",
               name: "FromDate",
@@ -189,6 +189,14 @@ export default defineComponent({
 
 <template>
   <div>
+    <FormulateForm
+      v-model="data.model"
+      :schema="data.schema"
+      @submit="handleSubmit"
+      ref="formRef"
+    >
+    </FormulateForm>
+
     <FormulateForm v-model="data.model" @submit="handleSubmit" ref="formRef">
       <h5 class="mb-4">
         Please provide all your addresses for the past 5 years
@@ -242,5 +250,7 @@ export default defineComponent({
         ></FormulateInput>
       </FormulateInput>
     </FormulateForm>
+
+    <pre>{{ data.model }} </pre>
   </div>
 </template>
