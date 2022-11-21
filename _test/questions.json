@@ -1,0 +1,50 @@
+[
+  {
+    "id": 1,
+    "type": "text",
+    "name": "FirstName",
+    "label": "First name",
+    "validation": "required"
+  },
+  {
+    "id": 2,
+    "type": "group",
+    "repeatable": true,
+    "name": "dependants",
+    "addLabel": "+ Dependant",
+    "children": [
+      {
+        "id": 3,
+        "type": "text",
+        "name": "firstName",
+        "label": "First name",
+        "validation": "required",
+        "help": "Please fill in all your first names"
+      },
+      {
+        "id": 4,
+        "type": "text",
+        "name": "lastName",
+        "label": "Last name",
+        "validation": "required"
+      },
+      {
+        "id": 5,
+        "type": "group",
+        "repeatable": true,
+        "name": "subjects",
+        "addLabel": "+ Subjects",
+        "children": [
+          {
+            "id": 6,
+            "type": "text",
+            "name": "firstName",
+            "label": "First name",
+            "validation": "required",
+            "help": "Please fill in all your first names"
+          }
+        ]
+      }
+    ]
+  }
+]
