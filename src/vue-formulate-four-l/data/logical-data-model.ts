@@ -1,4 +1,25 @@
-export const logicalDataModel = {
+export default {
+  addressHistory: [
+    {
+      country: 5453,
+      addressline1: "Ground floor",
+      addressline2: "Block B1",
+      posttownorcity: "Woodstock",
+      stateorprovince: "Western Cape",
+      postalcode: "7708",
+    },
+    {
+      country: 3128,
+      addressline1: "115 Protea road",
+      addressline2: "Pacaltsdorp",
+      posttownorcity: "George",
+      stateorprovince: "Western Cape",
+      postalcode: "6529",
+    },
+  ],
+};
+
+/*
   Explore: {
     Id: "20ad60f6-51c1-ec11-811e-0050560111da",
     QuestionnnaireSubmitted: null,
@@ -192,14 +213,9 @@ export const logicalDataModel = {
     AdditionalIncome: [],
     Assets: [],
   },
-  Dependents: [
-    //{
-    //PassportCountry: 5228,
-    //AdditionalPassports: [],
-    //},
-  ],
+  Dependents: [],
   TimeZone: {
     Windows: "GMT Standard Time",
     Iana: "Europe/London",
   },
-};
+*/

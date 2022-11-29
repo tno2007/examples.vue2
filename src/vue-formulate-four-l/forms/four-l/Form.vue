@@ -6,7 +6,7 @@ import Page2 from "./form-pages/Page2.vue";
 import Page3 from "./form-pages/Page3.vue";
 import Page4 from "./form-pages/Page4.vue";
 import { toVueFormulateFormat } from "../../common/composables/useFormHelper";
-//import {   } from "@morev/vue-transitions";
+import logicalDataModel from "../../data/logical-data-model";
 
 export default defineComponent({
   components: {
@@ -99,14 +99,13 @@ export default defineComponent({
       */
     };
 
+    // mimic getting data from an api
+    store.formModel = logicalDataModel;
+
     console.log("store.formModel", store.formModel);
 
-    store.formModel.PrimaryApplicant.CriminalRecord = "true";
-
-    model.value = toVueFormulateFormat(store.formModel, [
-      "PrimaryApplicant",
-      "Partner",
-    ]);
+    // convert api data to a vue-formulate format (grouped keys becomes arrays)
+    model.value = toVueFormulateFormat(store.formModel, []);
 
     onMounted(() => {});
     return {

@@ -8,13 +8,9 @@ import {
   reactive,
   ref,
 } from "vue";
-import { get, set } from "lodash";
-
 export default defineComponent({
   name: "Page1",
-  components: {
-    //TransitionExpand,
-  },
+  components: {},
   props: {
     modelProp: {
       type: Object as PropType<IModel>,
@@ -28,100 +24,6 @@ export default defineComponent({
 
     const data = reactive({
       model: {} as any,
-      schema: [
-        {
-          component: "h5",
-          children: "Please provide all your addresses for the past 5 years:",
-          class: "mb-4",
-        },
-        {
-          type: "group",
-          repeatable: true,
-          name: "AddressHistory",
-          addLabel: "+ Add address",
-          children: [
-            {
-              component: "h5",
-              children: "Address {{index}}",
-              class: "mb-4",
-            },
-            {
-              type: "yearmonthday",
-              name: "FromDate",
-              label: "From Date:",
-              validation: "^required",
-              validationMessages: {
-                required: "We need this information to assist you",
-              },
-            },
-            {
-              type: "yearmonthday",
-              name: "ToDate",
-              label: "To Date:",
-              validation: "^required",
-              validationMessages: {
-                required: "We need this information to assist you",
-              },
-            },
-            {
-              type: "select",
-              name: "Country",
-              label: "Country:",
-              validation: "^required",
-              validationMessages: {
-                required: "We need this information to assist you",
-              },
-              options: [],
-            },
-            {
-              type: "text",
-              name: "AddressLine1",
-              label: "Address:",
-              validation: "^required",
-              validationMessages: {
-                required: "We need this information to assist you",
-              },
-              placeholder: "Address line 1",
-            },
-            {
-              type: "text",
-              name: "AddressLine2",
-              validation: "^required",
-              validationMessages: {
-                required: "We need this information to assist you",
-              },
-              placeholder: "Address line 2",
-            },
-            {
-              type: "text",
-              name: "PostTownOrCity",
-              label: "Post town/City:",
-              validation: "^required",
-              validationMessages: {
-                required: "We need this information to assist you",
-              },
-            },
-            {
-              type: "text",
-              name: "StateOrProvince",
-              label: "State/Province:",
-              validation: "^required",
-              validationMessages: {
-                required: "We need this information to assist you",
-              },
-            },
-            {
-              type: "text",
-              name: "PostalCode",
-              label: "Postal code:",
-              validation: "^required",
-              validationMessages: {
-                required: "We need this information to assist you",
-              },
-            },
-          ],
-        },
-      ] as any,
       collections: {
         boolean: [
           {
@@ -133,7 +35,7 @@ export default defineComponent({
             value: "false",
           },
         ],
-        country: [] as any[],
+        countries: [] as any[],
       },
     });
 
@@ -151,27 +53,20 @@ export default defineComponent({
 
     data.model = props.modelProp;
 
-    const parsedSchema = computed(() => {
-      for (let index = 0; index < data.schema[1].children.length; index++) {
-        const child: any = data.schema[1].children[index];
-        child.children = `Address ${++index}`;
-        break;
-      }
-      return data.schema;
-    });
-
     onMounted(async () => {
+      console.log("modelProp", props.modelProp);
+
       fetch(
-        "https://webservices.1stcontact.com/crmproxy/api/v2/entities/lead/attributes/new_country"
+        "https://local-webservices.1stcontact.com/crmproxy/api/v5/optionset/lead/new_country"
       )
         .then((response) => response.json())
         .then((response) => {
-          const result: any[] = response.Result;
+          const result: any[] = response.value;
           const options = result.map(({ Description: label, Code: value }) => ({
             label,
             value,
           }));
-          data.schema[1].children[2].options = options;
+          data.collections.countries = options;
         });
     });
 
@@ -181,7 +76,6 @@ export default defineComponent({
       data,
       handleSubmit,
       validation,
-      parsedSchema,
     };
   },
 });
@@ -189,14 +83,6 @@ export default defineComponent({
 
 <template>
   <div>
-    <FormulateForm
-      v-model="data.model"
-      :schema="data.schema"
-      @submit="handleSubmit"
-      ref="formRef"
-    >
-    </FormulateForm>
-
     <FormulateForm v-model="data.model" @submit="handleSubmit" ref="formRef">
       <h5 class="mb-4">
         Please provide all your addresses for the past 5 years
@@ -205,7 +91,7 @@ export default defineComponent({
       <FormulateInput
         type="group"
         :repeatable="true"
-        name="AddressHistory"
+        name="addressHistory"
         #default="{ index }"
         add-label="+ Add address"
       >
@@ -215,7 +101,7 @@ export default defineComponent({
           name="country"
           label="Country:"
           :validation="[['required']]"
-          :options="data.collections.country"
+          :options="data.collections.countries"
         ></FormulateInput>
         <FormulateInput
           type="text"

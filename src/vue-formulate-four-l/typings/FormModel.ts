@@ -1,28 +1,9 @@
-import { runInThisContext } from "vm";
-import { IPrimaryApplicant, IPartner, IFormModel } from "./IFormModel";
+import { IFormModel, IAddressHistory } from "./IFormModel";
 
 export class FormModel implements IFormModel {
-  PrimaryApplicant: IPrimaryApplicant;
-  Partner: IPartner;
+  addressHistory: IAddressHistory[];
 
   constructor() {
-    this.PrimaryApplicant = {
-      CriminalRecord: null,
-    };
-    this.Partner = {
-      HadOtherNames: "false",
-    };
+    this.addressHistory = [];
   }
-
-  //PrimaryApplicant: IPrimaryApplicant;
-  /*  
-  PrimaryApplicant: { CriminalRecord: null };
-
-  constructor() {
-    this.PrimaryApplicant = {
-      CriminalRecord: null,
-    };
-  }
-*/
-  //PrimaryApplicant: { CriminalRecord: boolean | null };
 }
