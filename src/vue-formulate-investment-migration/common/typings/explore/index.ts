@@ -26,4 +26,5 @@ export interface ISchema {
   options?: ISchemaOption[];
   format?: "date";
   visible?: boolean | object;
+  if?: object;
 }

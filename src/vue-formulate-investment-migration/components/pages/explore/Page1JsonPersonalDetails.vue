@@ -11,8 +11,8 @@ import {
   watch,
 } from "@vue/composition-api";
 import collections from "../../../data/explore/collections";
-
 import jsonLogic from "json-logic-js";
+import { $bool, $get } from "../../../common/composables/useJsonLogicHelper";
 
 export default defineComponent({
   name: "Page1JsonPersonalDetails",
@@ -33,11 +33,11 @@ export default defineComponent({
     });
 
     data.model = ref({});
-
     data.schema = [
       {
         component: "h5",
         children: "Personal details (Main applicant)",
+        visible: true,
       },
       {
         type: "group",
@@ -99,7 +99,7 @@ export default defineComponent({
           {
             type: "radio",
             name: "criminalrecord",
-            label: "Do you have a criminal record?",
+            label: "Do you have a criminal record xxx?",
             options: [
               {
                 label: "Yes",
@@ -110,18 +110,19 @@ export default defineComponent({
                 value: "false",
               },
             ],
+            visible: false,
           },
           {
             type: "textarea",
             name: "criminalrecordmoreinfo",
             label: "Please provide details:",
-            //visible: "",
-            //if: "$get(contact.criminalrecord)",
+            //if: [{ "==": [{ $bool: "contact[0].criminalrecord" }, true] }],
           },
         ],
       },
     ];
 
+    /*
     const updateSchema = () => {
       console.log("updateSchema");
 
@@ -206,12 +207,14 @@ export default defineComponent({
               type: "textarea",
               name: "criminalrecordmoreinfo",
               label: "Please provide details:",
+              visible: {},
               if: "$get(contact.criminalrecord)",
             },
           ],
         },
       ] as ISchema[];
     };
+    */
 
     const handleSubmit = async (data: any) => {
       context.emit("handleSubmit", data);
@@ -225,20 +228,66 @@ export default defineComponent({
     watch(
       () => data.model,
       (newValue, oldValue) => {
-        updateSchema();
+        // updateSchema();
+        
       }
     );
 
     const computedSchema = computed(() => {
-      // filter schema to show only...
       return data.schema.filter((a: ISchema) => {
-        // items that do not have 'visible' property set
-        // or where 'visible' property has a true value
-        return typeof a.visible === "undefined" || a.visible;
+        if (a.children && Array.isArray(a.children)) {
+          return (a.children = a.children.filter((b: ISchema) => {
+            return typeof b.visible === "undefined" || b.visible;
+          }));
+        } else {
+          return typeof a.visible === "undefined" || a.visible;
+        }
       });
     });
 
-    jsonLogic.apply();
+    var a = jsonLogic.apply(
+      { var: ["b"] }, // Rule
+      { a: 1, b: 2 } // Data
+    );
+
+    jsonLogic.add_operation("$get", $get);
+    jsonLogic.add_operation("$bool", $bool);
+
+    var rules = {
+      if: [{ "==": [{ $bool: "contact[0].criminalrecord" }, true] }],
+    };
+
+    // ******************************************
+    const logic3 = () => {
+      let q = jsonLogic.apply(rules, data.model);
+      console.log("q", q);
+
+      var res1 = jsonLogic.apply({ $get: ["contact[0].Gender"] }, data.model);
+
+      console.log(typeof res1, res1);
+
+      var res2 = jsonLogic.apply(
+        { $bool: ["contact[0].criminalrecord"] },
+        data.model
+      );
+
+      console.log(typeof res2, res2);
+
+      /*
+      var a = jsonLogic.apply({ $get: [{ var: "contact" }] }, data.model);
+      console.log("a", a);
+
+      jsonLogic.add_operation("times", function (a: any, b: any) {
+        return a * b;
+      });
+      const b = jsonLogic.apply(
+        { times: [{ var: "a" }, { var: "b" }] },
+        { a: 2, b: 4 }
+      );
+      console.log("b", b);
+      */
+    };
+    // ******************************************
 
     return {
       formRef,
@@ -246,6 +295,7 @@ export default defineComponent({
       data,
       handleSubmit,
       computedSchema,
+      logic3,
     };
   },
 });
@@ -260,8 +310,9 @@ export default defineComponent({
       @submit="handleSubmit"
     >
     </FormulateForm>
+    <button @click="logic3">Click me</button>
     <div class="d-flex">
-      <div>
+      <div class="d-none">
         <pre>{{ computedSchema }}</pre>
       </div>
       <div>
@@ -274,5 +325,8 @@ export default defineComponent({
 <style lang="scss">
 .d-flex {
   display: flex;
+}
+.d-none {
+  display: none;
 }
 </style>
