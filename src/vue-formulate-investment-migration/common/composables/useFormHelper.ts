@@ -45,3 +45,20 @@ export const notFilledIn = (obj: any) => {
   // exclude bool checks
   //else if (typeof obj == "boolean") return false;
 };
+
+const setObjectsAsArrays = (obj: object, keys: string[]) => {
+  keys.forEach((k, index) => {
+    const value = get(obj, k) ?? {};
+    set(obj, k, [value]);
+  });
+  return obj;
+};
+
+/**
+ * Take an an js/json object an convert it to vue-formulate form format
+ * @param obj the js object to convert
+ * @param keys the names of keys to convert to arrays
+ */
+export const toVueFormulateFormat = (obj: object, keys: string[]) => {
+  return setObjectsAsArrays(obj, keys);
+};

@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    //"allowJs": true,
     "baseUrl": "./",
     "target": "esnext",
     "useDefineForClassFields": true,
@@ -18,7 +19,12 @@
     "skipLibCheck": true
   },
   "vueCompilerOptions": {
-    "target": 2
+    "target": 2.7
   },
-  "include": ["vite.config.*", "env.d.ts", "src/**/*", "src/**/*.vue"]
+  "include": [
+    "vite.config.*",
+    "env.d.ts",
+    "src/vue-formulate-four-l/**/*",
+    "src/vue-formulate-four-l/**/*.vue"
+  ]
 }

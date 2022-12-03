@@ -1,7 +1,6 @@
 import Vue from "vue";
 import VueCompositionAPI, { createApp, h } from "@vue/composition-api";
 import { createPinia, PiniaVuePlugin } from "pinia";
-
 import App from "./App.vue";
 
 Vue.use(VueCompositionAPI);
@@ -49,6 +48,12 @@ const app = createApp({
   pinia: createPinia(),
   render: () => h(App),
 });
+
 app.use(PiniaVuePlugin);
 
 app.mount("#app");
+
+console.log(app);
+
+const i = 2009;
+let yearPadded = i.toString().padStart(4, "0");

@@ -1,10 +1,11 @@
-<script setup lang="ts">
-import { defineComponent, onMounted, ref } from "@vue/composition-api";
+<script lang="ts">
+import {
+  onMounted,
+  ref,
+  useAttrs,
+  defineComponent,
+} from "@vue/composition-api";
 import { useAppStore } from "../stores/appStore";
-
-import { logicalDataModel } from "../data/logical-data-model";
-
-import Page1JsonPersonalDetails from "../components/pages/explore/Page1JsonPersonalDetails.vue";
 import Page1PersonalDetails from "../components/pages/explore/Page1PersonalDetails.vue";
 import Page2ContactDetails from "../components/pages/explore/Page2ContactDetails.vue";
 import Page3Nationalities from "../components/pages/explore/Page3Nationalities.vue";
@@ -14,52 +15,79 @@ import Page6IncomeAndAssets from "../components/pages/explore/Page6IncomeAndAsse
 import Page7LifeStyle from "../components/pages/explore/Page7LifeStyle.vue";
 import Page8Objectives from "../components/pages/explore/Page8Objectives.vue";
 import Testing from "../components/pages/explore/Testing.vue";
-import { get, set } from "lodash";
-import StepProgress from "vue-step-progress";
+import { toVueFormulateFormat } from "../common/composables/useFormHelper";
 
-const store = useAppStore();
+import axios, { AxiosError, AxiosResponse } from "axios";
 
-const formRef: any = ref(null);
+export default defineComponent({
+  setup(props, context) {
+    const store = useAppStore();
 
-const activePage = "Page1PersonalDetails";
+    //console.log("store model", store.formModel);
 
-const isSectionComplete = async (isComplete: boolean) => {
-  console.log("isSectionComplete", isComplete);
-};
+    console.log(context);
 
-const handleSubmit = async (data: any) => {
-  //context.emit("handleSubmit", data);
-  console.log("submit data", data);
-};
+    const appRef = ref<any>(null);
+    const r = ref<HTMLElement | null>(null);
+    const formRef = ref<any>(null);
 
-const setObjectsAsArrays = (obj: object, keys: string[]) => {
-  keys.forEach((k, index) => {
-    const value = get(obj, k) ?? {};
-    set(obj, k, [value]);
-  });
-  return obj;
-};
+    const model = ref<any>();
 
-const nextClick = async () => {
-  const appRef: any = context.refs.appRef;
-  const valid = await appRef.$refs.formRef.formSubmitted();
+    const activePage = "Page1PersonalDetails";
 
-  if (valid) {
-    console.log("valid!");
-  } else {
-    console.log("NOT valid!");
-  }
-};
+    const isSectionComplete = async (isComplete: boolean) => {
+      console.log("isSectionComplete", isComplete);
+    };
 
-onMounted(() => {
-  // TODO: re-add explore and primary-applicant
-  const structuredResponse = setObjectsAsArrays(logicalDataModel, [
-    "Explore",
-    "PrimaryApplicant",
-    "Partner",
-  ]);
+    const handleSubmit = async (data: any) => {
+      //context.emit("handleSubmit", data);
+      console.log("submit data", data);
+    };
 
-  store.logicalDataModel = structuredResponse;
+    const nextClick = async () => {
+      // submit programmatically here...
+      //context.root.$formulate.submit("myForm");\
+
+      /*
+      console.log("appRef.value", appRef);
+      const submitRef = appRef.value.$refs.submitRef;
+      submitRef.$el.click();
+*/
+
+      //const formRef = appRef.value.$refs.formRef;
+      const formRef = appRef.value.formRef;
+      //console.log("formRef", formRef);
+      const valid = formRef.formSubmitted();
+
+      /*
+      if (valid) {
+        console.log("valid!");
+      } else {
+        console.log("NOT valid!");
+      }
+
+      return;
+
+      */
+    };
+
+    //store.formModel.PrimaryApplicant.CriminalRecord = "true";
+
+    model.value = toVueFormulateFormat(store.formModel, ["PrimaryApplicant"]);
+    console.log("Formulate-model.value", model.value);
+
+    onMounted(() => {
+      // TODO: re-add explore and primary-applicant
+    });
+    return {
+      Page1PersonalDetails,
+      handleSubmit,
+      isSectionComplete,
+      nextClick,
+      model,
+      appRef,
+    };
+  },
 });
 
 // **********************
@@ -68,11 +96,11 @@ onMounted(() => {
 <template>
   <div>
     <component
-      :is="Page1JsonPersonalDetails"
+      :is="Page1PersonalDetails"
       ref="appRef"
       @handleSubmit="handleSubmit"
       @isSectionComplete="isSectionComplete"
-      :modelProp="store.logicalDataModel"
+      :modelProp="model"
     >
     </component>
     <button @click="nextClick" class="col btn btn-secondary ml-2">

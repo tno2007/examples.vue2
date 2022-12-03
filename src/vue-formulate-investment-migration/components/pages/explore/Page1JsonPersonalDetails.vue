@@ -35,6 +35,7 @@ export default defineComponent({
     data.model = ref({});
     data.schema = [
       {
+        name: "test1",
         component: "h5",
         children: "Personal details (Main applicant)",
         visible: true,
@@ -43,6 +44,30 @@ export default defineComponent({
         type: "group",
         name: "contact",
         children: [
+          {
+            type: "group",
+            name: "kids",
+            children: [
+              {
+                type: "text",
+                name: "FirstName",
+                label: "First name (as seen in passport):",
+                validation: "required",
+              },
+              {
+                type: "group",
+                name: "groupX",
+                children: [
+                  {
+                    type: "text",
+                    name: "Subfirstname",
+                    label: "Sub First name:",
+                    validation: "required",
+                  },
+                ],
+              },
+            ],
+          },
           {
             type: "text",
             name: "FirstName",
@@ -116,13 +141,13 @@ export default defineComponent({
             type: "textarea",
             name: "criminalrecordmoreinfo",
             label: "Please provide details:",
-            //if: [{ "==": [{ $bool: "contact[0].criminalrecord" }, true] }],
+            //visible: "",
+            //if: "$get(contact.criminalrecord)",
           },
         ],
       },
     ];
 
-    /*
     const updateSchema = () => {
       console.log("updateSchema");
 
@@ -214,7 +239,6 @@ export default defineComponent({
         },
       ] as ISchema[];
     };
-    */
 
     const handleSubmit = async (data: any) => {
       context.emit("handleSubmit", data);
@@ -228,66 +252,20 @@ export default defineComponent({
     watch(
       () => data.model,
       (newValue, oldValue) => {
-        // updateSchema();
-        
+        updateSchema();
       }
     );
 
     const computedSchema = computed(() => {
+      // filter schema to show only...
       return data.schema.filter((a: ISchema) => {
-        if (a.children && Array.isArray(a.children)) {
-          return (a.children = a.children.filter((b: ISchema) => {
-            return typeof b.visible === "undefined" || b.visible;
-          }));
-        } else {
-          return typeof a.visible === "undefined" || a.visible;
-        }
+        // items that do not have 'visible' property set
+        // or where 'visible' property has a true value
+        return typeof a.visible === "undefined" || a.visible;
       });
     });
 
-    var a = jsonLogic.apply(
-      { var: ["b"] }, // Rule
-      { a: 1, b: 2 } // Data
-    );
-
-    jsonLogic.add_operation("$get", $get);
-    jsonLogic.add_operation("$bool", $bool);
-
-    var rules = {
-      if: [{ "==": [{ $bool: "contact[0].criminalrecord" }, true] }],
-    };
-
-    // ******************************************
-    const logic3 = () => {
-      let q = jsonLogic.apply(rules, data.model);
-      console.log("q", q);
-
-      var res1 = jsonLogic.apply({ $get: ["contact[0].Gender"] }, data.model);
-
-      console.log(typeof res1, res1);
-
-      var res2 = jsonLogic.apply(
-        { $bool: ["contact[0].criminalrecord"] },
-        data.model
-      );
-
-      console.log(typeof res2, res2);
-
-      /*
-      var a = jsonLogic.apply({ $get: [{ var: "contact" }] }, data.model);
-      console.log("a", a);
-
-      jsonLogic.add_operation("times", function (a: any, b: any) {
-        return a * b;
-      });
-      const b = jsonLogic.apply(
-        { times: [{ var: "a" }, { var: "b" }] },
-        { a: 2, b: 4 }
-      );
-      console.log("b", b);
-      */
-    };
-    // ******************************************
+    jsonLogic.apply();
 
     return {
       formRef,
@@ -302,6 +280,7 @@ export default defineComponent({
 </script>
 
 <template>
+  <!--
   <div>
     <FormulateForm
       ref="formRef"
@@ -319,6 +298,15 @@ export default defineComponent({
         <pre> {{ data.model }} </pre>
       </div>
     </div>
+  </div>
+  -->
+  <div>
+    <div>
+      <pre>
+        {{ computedSchema }}
+      </pre>
+    </div>
+    <div></div>
   </div>
 </template>
 

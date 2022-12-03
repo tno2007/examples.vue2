@@ -1,0 +1,1 @@
+vite serve ./src/vanilla-bootstrap-5 --port 3015 --open
