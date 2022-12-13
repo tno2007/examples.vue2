@@ -3,6 +3,7 @@ import { IModel } from "../../../common/typings/explore";
 import {
   computed,
   defineComponent,
+  nextTick,
   onMounted,
   PropType,
   reactive,
@@ -54,8 +55,9 @@ export default defineComponent({
     data.model = props.modelProp;
 
     onMounted(async () => {
-      console.log("modelProp", props.modelProp);
-
+      //console.log("modelProp", props.modelProp);
+      //await nextTick();
+      /*
       fetch(
         "https://local-webservices.1stcontact.com/crmproxy/api/v5/optionset/lead/new_country"
       )
@@ -68,6 +70,9 @@ export default defineComponent({
           }));
           data.collections.countries = options;
         });
+        
+*/
+      await nextTick();
     });
 
     return {
@@ -76,6 +81,7 @@ export default defineComponent({
       data,
       handleSubmit,
       validation,
+      props,
     };
   },
 });
@@ -95,42 +101,61 @@ export default defineComponent({
         #default="{ index }"
         add-label="+ Add address"
       >
-        <h5 class="pt-2 pb-2">Address ({{ index + 1 }})</h5>
+        <h5 class="pt-2 pb-2">
+          {{ index == 0 ? `Current Address` : `Previous address (${index})` }}
+        </h5>
+
+        <FormulateInput
+          type="yearmonthday"
+          name="new_fromdate"
+          label="From date:"
+          :validation="[['required']]"
+          v-if="index > 0"
+        ></FormulateInput>
+
+        <FormulateInput
+          type="yearmonthday"
+          name="new_todate"
+          label="To date:"
+          :validation="[['required']]"
+          v-if="index > 0"
+        ></FormulateInput>
+
         <FormulateInput
           type="select"
-          name="country"
+          name="new_country"
           label="Country:"
           :validation="[['required']]"
           :options="data.collections.countries"
         ></FormulateInput>
         <FormulateInput
           type="text"
-          name="addressline1"
+          name="new_addressline1"
           label="Address:"
           :validation="[['required']]"
           placeholder="Address line 1"
         ></FormulateInput>
         <FormulateInput
           type="text"
-          name="addressline2"
+          name="new_addressline1"
           :validation="[['required']]"
           placeholder="Address line 2"
         ></FormulateInput>
         <FormulateInput
           type="text"
-          name="posttownorcity"
+          name="new_posttownorcity"
           label="Post town / city:"
           :validation="[['required']]"
         ></FormulateInput>
         <FormulateInput
           type="text"
-          name="stateorprovince"
+          name="new_stateorprovince"
           label="State / Province:"
           :validation="[['required']]"
         ></FormulateInput>
         <FormulateInput
           type="text"
-          name="postalcode"
+          name="new_postalcode"
           label="Postal code:"
           :validation="[['required']]"
         ></FormulateInput>

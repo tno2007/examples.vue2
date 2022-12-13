@@ -65,8 +65,8 @@ export default defineComponent({
         {
           type: "group",
           repeatable: true,
-          name: "addresses",
-          addLabel: "+ Address",
+          name: "influencers",
+          addLabel: "+ influencers",
           default: "",
           children: [
             {
@@ -75,7 +75,7 @@ export default defineComponent({
               class: "pt-2 pb-2",
             },
             {
-              name: "Country",
+              name: "country",
               label: "Country $index",
             },
             {
@@ -154,6 +154,29 @@ export default defineComponent({
       });
     };
 
+    /*
+        # Logic
+
+        - Is this a FormulateInput a 'group' and 'repeatable'?
+          - Yes
+            - store <Name>, <defaultId> of group
+            - Traverse children ...
+            - Find next FormulateRepeatableProvider
+            - store
+              - <Group.Name>
+              - <FormulateRepeatableProvider#Index>
+              - <defaultId>
+            - Traverse children ...
+            - Find next FormulateInput
+            - Do this FormulateInput have a label?
+              - Yes
+                 - Do this label have $index in string?
+                   - Yes
+                     - replace $index with current repeat index!
+                   - No
+              - No
+    */
+
     // loop children
     const loopChildren = (children: any) => {
       if (!children) return;
@@ -161,19 +184,13 @@ export default defineComponent({
       let repeatableIndex = 0;
       children.forEach((c: any) => {
         const tag: string = c.$vnode.tag;
+        const key: string = c.$vnode.key;
 
-        if (tag.endsWith("-FormulateInputGroup")) {
-          console.log("FormulateInputGroup");
+        if (c.label) {
+          console.log("c", tag, key, c.label);
         }
 
-        if (tag.endsWith("-FormulateRepeatableProvider")) {
-          // ++rCount;
-          // ++repeatableIndex;
-          //loopRepeatableChildren(c.$children, rCount);
-          //if (c.$children) loopChildren(c.$children);
-          console.log("FormulateRepeatableProvider");
-        }
-
+        /*
         if (tag.endsWith("-FormulateInput")) {
           if (c.type == "group") {
             if (c.repeatable) {
@@ -181,6 +198,15 @@ export default defineComponent({
             }
           }
         }
+
+        if (tag.endsWith("-FormulateInputGroup")) {
+          console.log("FormulateInputGroup");
+        }
+
+        if (tag.endsWith("-FormulateRepeatableProvider")) {
+          console.log("FormulateRepeatableProvider");
+        }
+        */
 
         if (c.$children) loopChildren(c.$children);
       });

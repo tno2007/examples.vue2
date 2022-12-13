@@ -1,5 +1,12 @@
 <script lang="ts">
-import { onMounted, ref, defineComponent, reactive, computed } from "vue";
+import {
+  onMounted,
+  ref,
+  defineComponent,
+  reactive,
+  computed,
+  nextTick,
+} from "vue";
 import { useAppStore } from "../../stores/appStore";
 import Page1 from "./form-pages/Page1.vue";
 import Page2 from "./form-pages/Page2.vue";
@@ -99,15 +106,28 @@ export default defineComponent({
       */
     };
 
-    // mimic getting data from an api
-    store.formModel = logicalDataModel;
+    onMounted(async () => {
+      // await nextTick();
+      //await nextTick();
+    });
 
-    console.log("store.formModel", store.formModel);
+    const populateData = () => {
+      // mimic getting data from an api
+      fetch("http://local-webservices.1stcontact.com/odataformapi/api/fourl")
+        .then((response) => response.json())
+        .then((data) => {
+          //console.log(data);
+          store.formModel = data;
+          //store.formModel = logicalDataModel;
 
-    // convert api data to a vue-formulate format (grouped keys becomes arrays)
-    model.value = toVueFormulateFormat(store.formModel, []);
+          //console.log("store.formModel", store.formModel);
 
-    onMounted(() => {});
+          // convert api data to a vue-formulate format (grouped keys becomes arrays)
+          model.value = toVueFormulateFormat(store.formModel, []);
+          console.log("model.value", model.value);
+        });
+    };
+
     return {
       data,
       Page1,
@@ -119,6 +139,7 @@ export default defineComponent({
       appRef,
       tabClick,
       activeComponent,
+      populateData,
     };
   },
 });
@@ -164,6 +185,8 @@ export default defineComponent({
     <button @click="nextClick" class="col btn btn-primary ml-2" v-if="false">
       Submit
     </button>
+
+    <button @click="populateData">Get data</button>
   </div>
 </template>
 

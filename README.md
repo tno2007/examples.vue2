@@ -79,3 +79,53 @@ Child 2 - john denver
     surname: denver
 */
 ```
+
+```json
+// new_visadependent/new_relationship
+[
+  {
+    "Key": "Brother in law",
+    "Value": 100000000
+  },
+  {
+    "Key": "Child",
+    "Value": 100000001
+  },
+  {
+    "Key": "Civil Partner",
+    "Value": 100000002
+  },
+  {
+    "Key": "Commonlaw Spouse",
+    "Value": 100000003
+  },
+  {
+    "Key": "Fiance",
+    "Value": 100000004
+  },
+  {
+    "Key": "Grandparent",
+    "Value": 100000005
+  },
+  {
+    "Key": "Parent",
+    "Value": 100000006
+  },
+  {
+    "Key": "Sibling",
+    "Value": 100000007
+  },
+  {
+    "Key": "Sister in law",
+    "Value": 100000008
+  },
+  {
+    "Key": "Spouse",
+    "Value": 100000009
+  },
+  {
+    "Key": "Partner",
+    "Value": 100000010
+  }
+]
+```
