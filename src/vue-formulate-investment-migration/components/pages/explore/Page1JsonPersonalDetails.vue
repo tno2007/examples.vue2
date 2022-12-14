@@ -9,7 +9,7 @@ import {
   reactive,
   ref,
   watch,
-} from "@vue/composition-api";
+} from "vue";
 import collections from "../../../data/explore/collections";
 import jsonLogic from "json-logic-js";
 import { $bool, $get } from "../../../common/composables/useJsonLogicHelper";
@@ -273,7 +273,7 @@ export default defineComponent({
       data,
       handleSubmit,
       computedSchema,
-      logic3,
+      //logic3,
     };
   },
 });

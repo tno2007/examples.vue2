@@ -14,6 +14,7 @@ import Page3 from "./form-pages/Page3.vue";
 import Page4 from "./form-pages/Page4.vue";
 import { toVueFormulateFormat } from "../../common/composables/useFormHelper";
 import logicalDataModel from "../../data/logical-data-model";
+import Test from "./Test.vue";
 
 export default defineComponent({
   components: {
@@ -21,6 +22,7 @@ export default defineComponent({
     Page2,
     Page3,
     Page4,
+    Test,
   },
   setup(props, context) {
     const store = useAppStore();
@@ -109,22 +111,30 @@ export default defineComponent({
     onMounted(async () => {
       // await nextTick();
       //await nextTick();
+
+      populateData();
     });
 
     const populateData = () => {
       // mimic getting data from an api
-      fetch("http://local-webservices.1stcontact.com/odataformapi/api/fourl")
+      var url =
+        "http://local-webservices.1stcontact.com/odataformapi/api/fourl";
+      url = "http://localhost:3000/db";
+      fetch(url)
         .then((response) => response.json())
         .then((data) => {
           //console.log(data);
-          store.formModel = data;
+          //store.formModel = data;
+
           //store.formModel = logicalDataModel;
 
           //console.log("store.formModel", store.formModel);
 
           // convert api data to a vue-formulate format (grouped keys becomes arrays)
-          model.value = toVueFormulateFormat(store.formModel, []);
-          console.log("model.value", model.value);
+          //model.value = toVueFormulateFormat(store.formModel, []);
+          //console.log("model.value", model.value);
+
+          store.formModel = data;
         });
     };
 
@@ -176,7 +186,6 @@ export default defineComponent({
           ref="appRef"
           @handleSubmit="handleSubmit"
           @isSectionComplete="isSectionComplete"
-          :modelProp="model"
         >
         </component>
       </transition-fade>
@@ -186,7 +195,9 @@ export default defineComponent({
       Submit
     </button>
 
+    <!--
     <button @click="populateData">Get data</button>
+    -->
   </div>
 </template>
 

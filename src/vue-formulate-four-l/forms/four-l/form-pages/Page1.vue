@@ -9,22 +9,25 @@ import {
   reactive,
   ref,
 } from "vue";
+import { useAppStore } from "../../../stores/appStore";
+
 export default defineComponent({
   name: "Page1",
   components: {},
   props: {
     modelProp: {
-      type: Object as PropType<IModel>,
-      required: true,
+      type: Object, // as PropType<IModel>,
+      required: false,
       default: () => ({}),
     },
   },
   setup(props, context) {
+    const store = useAppStore();
     const formRef: any = ref(null);
     const submitRef: any = ref(null);
 
     const data = reactive({
-      model: {} as any,
+      model: props.modelProp,
       collections: {
         boolean: [
           {
@@ -52,7 +55,9 @@ export default defineComponent({
 
     const validation = async (validation: IValidation) => {};
 
-    data.model = props.modelProp;
+    //data.model = props.modelProp;
+
+    //const m = computed(() => props.modelProp);
 
     onMounted(async () => {
       //console.log("modelProp", props.modelProp);
@@ -82,6 +87,8 @@ export default defineComponent({
       handleSubmit,
       validation,
       props,
+      //m,
+      store,
     };
   },
 });
@@ -89,7 +96,11 @@ export default defineComponent({
 
 <template>
   <div>
-    <FormulateForm v-model="data.model" @submit="handleSubmit" ref="formRef">
+    <FormulateForm
+      v-model="store.formModel"
+      @submit="handleSubmit"
+      ref="formRef"
+    >
       <h5 class="mb-4">
         Please provide all your addresses for the past 5 years
       </h5>
