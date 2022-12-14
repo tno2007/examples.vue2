@@ -1,14 +1,20 @@
 <script setup lang="ts">
-defineProps({
+import { reactive } from "vue";
+
+const props = defineProps({
   modelProp: {
     default: () => ({}),
     type: Object,
   },
 });
+
+const data = reactive({
+  model: props.modelProp,
+});
 </script>
 
 <template>
   <div>
-    <pre>{{ modelProp }}</pre>
+    <input type="text" name="" id="" />
   </div>
 </template>

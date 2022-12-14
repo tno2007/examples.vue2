@@ -1,28 +1,12 @@
 <script lang="ts">
-import { IModel } from "../../../common/typings/explore";
-import {
-  computed,
-  defineComponent,
-  onMounted,
-  PropType,
-  reactive,
-  ref,
-} from "vue";
-import { get, set } from "lodash";
+import { defineComponent, onMounted, reactive, ref } from "vue";
+import { useAppStore } from "../../../stores/appStore";
 
 export default defineComponent({
   name: "Page4",
-  components: {
-    //TransitionExpand,
-  },
-  props: {
-    modelProp: {
-      type: Object as PropType<IModel>,
-      required: true,
-      default: () => ({}),
-    },
-  },
+
   setup(props, context) {
+    const store = useAppStore();
     const formRef: any = ref(null);
     const submitRef: any = ref(null);
 

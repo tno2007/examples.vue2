@@ -1,47 +1,16 @@
 <script lang="ts">
-import { IModel } from "../../../common/typings/explore";
-import {
-  computed,
-  defineComponent,
-  nextTick,
-  onMounted,
-  PropType,
-  reactive,
-  ref,
-} from "vue";
+import { defineComponent, onMounted, reactive, ref } from "vue";
 import { useAppStore } from "../../../stores/appStore";
 
 export default defineComponent({
   name: "Page1",
   components: {},
-  props: {
-    modelProp: {
-      type: Object, // as PropType<IModel>,
-      required: false,
-      default: () => ({}),
-    },
-  },
   setup(props, context) {
     const store = useAppStore();
     const formRef: any = ref(null);
     const submitRef: any = ref(null);
 
-    const data = reactive({
-      model: props.modelProp,
-      collections: {
-        boolean: [
-          {
-            label: "Yes",
-            value: "true",
-          },
-          {
-            label: "No",
-            value: "false",
-          },
-        ],
-        countries: [] as any[],
-      },
-    });
+    const data = reactive({});
 
     const handleSubmit = async (data: any) => {
       context.emit("handleSubmit", data);
@@ -55,30 +24,7 @@ export default defineComponent({
 
     const validation = async (validation: IValidation) => {};
 
-    //data.model = props.modelProp;
-
-    //const m = computed(() => props.modelProp);
-
-    onMounted(async () => {
-      //console.log("modelProp", props.modelProp);
-      //await nextTick();
-      /*
-      fetch(
-        "https://local-webservices.1stcontact.com/crmproxy/api/v5/optionset/lead/new_country"
-      )
-        .then((response) => response.json())
-        .then((response) => {
-          const result: any[] = response.value;
-          const options = result.map(({ Description: label, Code: value }) => ({
-            label,
-            value,
-          }));
-          data.collections.countries = options;
-        });
-        
-*/
-      await nextTick();
-    });
+    onMounted(async () => {});
 
     return {
       formRef,
@@ -86,8 +32,6 @@ export default defineComponent({
       data,
       handleSubmit,
       validation,
-      props,
-      //m,
       store,
     };
   },
@@ -117,6 +61,13 @@ export default defineComponent({
         </h5>
 
         <FormulateInput
+          type="checkbox"
+          name="new_iscurrent"
+          :v-model="index == 0 ? true : false"
+          v-show="false"
+        ></FormulateInput>
+
+        <FormulateInput
           type="yearmonthday"
           name="new_fromdate"
           label="From date:"
@@ -137,7 +88,7 @@ export default defineComponent({
           name="new_country"
           label="Country:"
           :validation="[['required']]"
-          :options="data.collections.countries"
+          :options="store.collections.countries"
         ></FormulateInput>
         <FormulateInput
           type="text"
@@ -148,7 +99,7 @@ export default defineComponent({
         ></FormulateInput>
         <FormulateInput
           type="text"
-          name="new_addressline1"
+          name="new_addressline2"
           :validation="[['required']]"
           placeholder="Address line 2"
         ></FormulateInput>
@@ -172,7 +123,5 @@ export default defineComponent({
         ></FormulateInput>
       </FormulateInput>
     </FormulateForm>
-
-    <pre>{{ data.model }} </pre>
   </div>
 </template>
