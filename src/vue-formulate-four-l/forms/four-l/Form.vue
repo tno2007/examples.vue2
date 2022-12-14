@@ -1,12 +1,5 @@
 <script lang="ts">
-import {
-  onMounted,
-  ref,
-  defineComponent,
-  reactive,
-  computed,
-  nextTick,
-} from "vue";
+import { onMounted, ref, defineComponent, reactive, computed } from "vue";
 import { useAppStore } from "../../stores/appStore";
 import Page1 from "./form-pages/Page1.vue";
 import Page2 from "./form-pages/Page2.vue";
@@ -109,17 +102,24 @@ export default defineComponent({
     };
 
     onMounted(async () => {
-      // await nextTick();
-      //await nextTick();
-
+      getCollections();
       populateData();
     });
+
+    const getCollections = () => {
+      let url =
+        "http://local-webservices.1stcontact.com/odataformapi/api/collection";
+      fetch(url)
+        .then((response) => response.json())
+        .then((data) => {
+          store.collections = data;
+        });
+    };
 
     const populateData = () => {
       // mimic getting data from an api
       var url =
         "http://local-webservices.1stcontact.com/odataformapi/api/fourl";
-      url = "http://localhost:3000/db";
       fetch(url)
         .then((response) => response.json())
         .then((data) => {
@@ -131,7 +131,7 @@ export default defineComponent({
           //console.log("store.formModel", store.formModel);
 
           // convert api data to a vue-formulate format (grouped keys becomes arrays)
-          //model.value = toVueFormulateFormat(store.formModel, []);
+          model.value = toVueFormulateFormat(store.formModel, []);
           //console.log("model.value", model.value);
 
           store.formModel = data;
@@ -150,6 +150,7 @@ export default defineComponent({
       tabClick,
       activeComponent,
       populateData,
+      store,
     };
   },
 });
@@ -198,6 +199,8 @@ export default defineComponent({
     <!--
     <button @click="populateData">Get data</button>
     -->
+
+    <pre>{{ store.formModel }}</pre>
   </div>
 </template>
 
