@@ -1,7 +1,6 @@
 export interface IFormModel {
   addressHistory: IAddress[];
-  partner: IPartner;
-  previousPartners: IPartner[];
+  partners: IPartner[];
   referees: IReferee[];
   biometricEnrollment: IBiometricEnrollment;
 }
@@ -22,11 +21,11 @@ export interface IReferee {
 
 export interface IBiometricEnrollment {
   new_biometricenrolmentid: string | null;
-  _new_4lquestionnaireid_value: string;
-  new_hadfingerprintstakenpartofimmigrationapp: boolean;
-  new_brpenclosed: boolean;
-  new_brpissued: boolean;
-  new_medicalorphysicalconditionforspecialneeds: boolean;
+  _new_4lquestionnaireid_value?: string;
+  new_hadfingerprintstakenpartofimmigrationapp?: boolean;
+  new_brpenclosed?: boolean;
+  new_brpissued?: boolean;
+  new_medicalorphysicalconditionforspecialneeds?: boolean;
   new_returneddatesendtous?: any;
   new_fingerprintstakentowncity?: any;
   new_lostdatereportedbrp?: any;
@@ -61,15 +60,20 @@ export interface IAddress {
   postalcode?: string | null;
 }
 
-export interface IPartnerInfo {
-  new_iscurrent?: boolean | null;
-  new_citizenshipdate?: string | null;
+export interface IPartner {
   new_forename?: string | null;
   new_middlename?: string | null;
   new_surname?: string | null;
+  new_knownbyothernames?: boolean | null;
+  new_othernames?: string | null;
+  new_dateofbirth: string | null;
+
+  new_iscurrent?: boolean | null;
+  new_citizenshipdate?: string | null;
+
   new_countryofbirth?: string | null;
   new_dateofmarriage?: string | null;
-  new_knownbyothernames?: string | null;
+
   new_partnershipenddate?: string | null;
   new_partnershipendplace?: string | null;
   new_partnershipendreason?: string | null;
@@ -78,9 +82,6 @@ export interface IPartnerInfo {
   new_relationship?: string | null;
   new_villagetownorcity?: string | null;
   new_visadependentid?: string | null;
-}
-
-export interface IPartner {
-  info: IPartnerInfo;
+  new_naturalisedbritishcitizen: boolean | null;
   address: IAddress;
 }

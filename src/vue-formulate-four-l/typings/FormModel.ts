@@ -8,19 +8,16 @@ import {
 
 export class FormModel implements IFormModel {
   addressHistory: IAddress[];
-  partner: IPartner;
-  previousPartners: IPartner[];
+  partners: IPartner[];
   referees: IReferee[];
   biometricEnrollment: IBiometricEnrollment;
 
   constructor() {
     this.addressHistory = [];
-    this.partner = {
-      info: {},
-      address: {},
-    };
-    this.previousPartners = [];
+    this.partners = [];
     this.referees = [];
-    this.biometricEnrollment = {};
+    this.biometricEnrollment = {
+      new_biometricenrolmentid: null,
+    };
   }
 }

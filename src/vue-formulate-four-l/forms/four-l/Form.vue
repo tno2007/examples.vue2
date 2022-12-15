@@ -130,6 +130,8 @@ export default defineComponent({
 
           //console.log("store.formModel", store.formModel);
 
+          console.log("store.formModel", store.formModel);
+
           // convert api data to a vue-formulate format (grouped keys becomes arrays)
           model.value = toVueFormulateFormat(store.formModel, []);
           //console.log("model.value", model.value);
