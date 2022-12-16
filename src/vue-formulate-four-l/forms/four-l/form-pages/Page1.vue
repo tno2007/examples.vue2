@@ -52,6 +52,34 @@ export default defineComponent({
       <FormulateInput
         type="group"
         :repeatable="true"
+        name="test"
+        #default="{ index }"
+        add-label="+ Add test"
+      >
+        <FormulateInput
+          type="text"
+          name="new_addressline1"
+          label="Address:"
+        ></FormulateInput>
+      </FormulateInput>
+
+      <FormulateInput
+        type="group"
+        :repeatable="true"
+        name="test2"
+        #default="{ index }"
+        add-label="+ Add test2"
+      >
+        <FormulateInput
+          type="text"
+          name="new_addressline1"
+          label="Address:"
+        ></FormulateInput>
+      </FormulateInput>
+
+      <FormulateInput
+        type="group"
+        :repeatable="true"
         name="addressHistory"
         #default="{ index }"
         add-label="+ Add address"
@@ -125,3 +153,5 @@ export default defineComponent({
     </FormulateForm>
   </div>
 </template>
+
+<style scoped lang="scss"></style>

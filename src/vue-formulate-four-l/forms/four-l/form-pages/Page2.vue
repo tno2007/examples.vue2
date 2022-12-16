@@ -283,8 +283,4 @@ export default defineComponent({
   </div>
 </template>
 
-<style lang="scss">
-//.formulate-input .formulate-input-element {
-//max-width: none;
-//}
-</style>
+<style lang="scss"></style>

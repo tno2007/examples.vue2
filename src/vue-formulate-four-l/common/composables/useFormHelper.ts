@@ -1,4 +1,5 @@
-import { get, set } from "lodash";
+import { get } from "lodash";
+import { get as g } from "get-wild";
 
 export function getObjectValue(o: any, s: string) {
   s = s.replace(/\[(\w+)\]/g, ".$1"); // convert indexes to properties
@@ -31,12 +32,53 @@ export const notFilledIn = (obj: any) => {
   //else if (typeof obj == "boolean") return false;
 };
 
+const isObject = (obj: object) => {
+  var result = typeof obj === "object" && obj !== null && !Array.isArray(obj);
+  return result;
+};
+
 const setObjectsAsArrays = (obj: object, keys: string[]) => {
+  let o = JSON.parse(JSON.stringify(obj));
+
   keys.forEach((k, index) => {
-    const value = get(obj, k) ?? {};
-    set(obj, k, [value]);
+    let value = g(o, k);
+
+    if (value) {
+      if (Array.isArray(value)) {
+        for (let i = 0; i < value.length; i++) {
+          const v = value[i];
+          set(o, k.replace("*", `[${i}]`), [v]);
+        }
+      }
+      if (isObject(value)) {
+        set(o, k, [value]);
+      }
+    }
   });
-  return obj;
+  return o;
+};
+
+export const set = (obj: object, path: any, value: any) => {
+  if (Object(obj) !== obj) return obj; // When obj is not an object
+  // If not yet an array, get the keys from the string-path
+  if (!Array.isArray(path)) path = path.toString().match(/[^.[\]]+/g) || [];
+  path.slice(0, -1).reduce(
+    (
+      a: any,
+      c: string,
+      i: number // Iterate all of them except the last one
+    ) =>
+      Object(a[c]) === a[c] // Does the key exist and is its value an object?
+        ? // Yes: then follow that path
+          a[c]
+        : // No: create the key. Is the next key a potential array-index?
+          (a[c] =
+            Math.abs(path[i + 1]) >> 0 === +path[i + 1]
+              ? [] // Yes: assign a new array object
+              : {}), // No: assign a new plain object
+    obj
+  )[path[path.length - 1]] = value; // Finally assign the value to the last key
+  return obj; // Return the top-level object to allow chaining
 };
 
 /**

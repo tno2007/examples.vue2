@@ -12,6 +12,8 @@ export const useAppStore = defineStore({
     formModel: {} as any,
     customCollections: {
       countries: [],
+      genders: [],
+      BrpLocations: [],
     },
     defaultCollections: {
       boolean: [

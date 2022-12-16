@@ -1,3 +1,17 @@
+<!--
+
+# What was the purpose of externalizing the vf componenets?
+
+Here's the thing.
+I want to centralize the form props and events (define it in one place)
+I wanted to auto-boolize the true/false values for radio buttons, in one place, not in 4 different places.
+The best way I can do it is in the main Form.cue file.
+
+Now that its in one place, I can create a common function for it
+
+
+
+-->
 <script lang="ts">
 import { onMounted, ref, defineComponent, reactive, computed } from "vue";
 import { useAppStore } from "../../stores/appStore";
@@ -5,9 +19,13 @@ import Page1 from "./form-pages/Page1.vue";
 import Page2 from "./form-pages/Page2.vue";
 import Page3 from "./form-pages/Page3.vue";
 import Page4 from "./form-pages/Page4.vue";
-import { toVueFormulateFormat } from "../../common/composables/useFormHelper";
-import logicalDataModel from "../../data/logical-data-model";
+import Page4External from "./form-pages/Page4External.vue";
+import {
+  set,
+  toVueFormulateFormat,
+} from "../../common/composables/useFormHelper";
 import Test from "./Test.vue";
+import { get } from "get-wild";
 
 export default defineComponent({
   components: {
@@ -15,6 +33,7 @@ export default defineComponent({
     Page2,
     Page3,
     Page4,
+    Page4External,
     Test,
   },
   setup(props, context) {
@@ -24,9 +43,15 @@ export default defineComponent({
       questionnaireComplete: false,
       tabs: [
         {
+          label: "Start here",
+          componentName: "Page4External",
+          active: true,
+          completed: false,
+        },
+        {
           label: "Address history",
           componentName: "Page1",
-          active: true,
+          active: false,
           completed: false,
         },
         {
@@ -69,11 +94,6 @@ export default defineComponent({
       console.log("isSectionComplete", isComplete);
     };
 
-    const handleSubmit = async (data: any) => {
-      //context.emit("handleSubmit", data);
-      console.log("submit data", data);
-    };
-
     const nextClick = async () => {
       // submit programmatically here...
       //context.root.$formulate.submit("myForm");\
@@ -101,18 +121,22 @@ export default defineComponent({
       */
     };
 
+    let activeCmp: string | null = null;
+
     onMounted(async () => {
       console.log("Form.onMounted");
 
       getCollections();
       populateData();
+
+      activeCmp = "Page4External";
     });
 
     const getCollections = () => {
       let url =
         "http://local-webservices.1stcontact.com/odataformapi/api/collection";
-      url = "http://localhost/Examples.NetFx.CrmODataFormApi/api/collection";
-      url = "http://localhost:3001/db";
+      //url = "http://localhost/Examples.NetFx.CrmODataFormApi/api/collection";
+      //url = "http://localhost:3001/db";
       fetch(url)
         .then((response) => response.json())
         .then((data) => {
@@ -124,34 +148,79 @@ export default defineComponent({
       // mimic getting data from an api
       var url =
         "http://local-webservices.1stcontact.com/odataformapi/api/fourl";
-      url = "http://localhost/Examples.NetFx.CrmODataFormApi/api/fourl";
-      url = "http://localhost:3002/db";
+      //url = "http://localhost/Examples.NetFx.CrmODataFormApi/api/fourl";
+      //url = "http://localhost:3002/db";
       fetch(url)
         .then((response) => response.json())
         .then((data) => {
-          //console.log(data);
-          //store.formModel = data;
+          /**/
+          let vfModel = data;
 
-          //store.formModel = logicalDataModel;
+          console.log("data", data);
 
-          //console.log("store.formModel", store.formModel);
+          vfModel = toVueFormulateFormat(data, [
+            "biometricEnrollment",
+            "currentPartner.info",
+            "currentPartner.address",
+            "currentPartner",
+            "referees.*.info",
+          ]);
 
-          // console.log("data", data);
+          let boolArray = [
+            "biometricEnrollment.*.new_brpissued",
+            "biometricEnrollment.*.new_brplocation",
+          ];
 
-          // convert api data to a vue-formulate format (grouped keys becomes arrays)
+          //let b = get(vfModel, "biometricEnrollment.*.new_brpissued");
+          //console.log("b", b);
 
-          let parse1 = toVueFormulateFormat(data, ["currentPartner.info"]);
-          let parse2 = toVueFormulateFormat(parse1, ["currentPartner.address"]);
-          let vfModel = toVueFormulateFormat(parse2, ["currentPartner"]);
-          //console.log("model.value", model.value);
+          /**/
+          vfModel = boolToStringUpdate(vfModel, boolArray);
 
           console.log("vfModel", vfModel);
-
-          //store.formModel = data;
-
           store.formModel = vfModel;
+          //store.formModel = data;
         });
     };
+
+    const handleSubmit = async (data: any) => {
+      context.emit("handleSubmit", data);
+    };
+
+    const dataChange = (data: any) => {
+      store.formModel = data;
+    };
+
+    const boolToStringUpdate = (obj: any, boolArray: string[]) => {
+      let o = JSON.parse(JSON.stringify(obj));
+      boolArray.forEach((b) => {
+        console.log("looping", b);
+        var value = get(o, b);
+        if (typeof value != undefined) {
+          console.log("value", value);
+          if (Array.isArray(value)) {
+            console.log("is array");
+            for (let i = 0; i < value.length; i++) {
+              const v = value[i];
+              set(o, b.replace(`.*.`, `[${i}]`), v.toString());
+            }
+          }
+        }
+      });
+      return o;
+    };
+
+    const onInput = (data: any) => {
+      // handle bool as strings for type=radio
+    };
+
+    interface IValidation {
+      errors: any[];
+      hasErrors: boolean;
+      name: string;
+    }
+
+    const validation = async (validation: IValidation) => {};
 
     return {
       data,
@@ -166,6 +235,10 @@ export default defineComponent({
       activeComponent,
       populateData,
       store,
+      onInput,
+      validation,
+      dataChange,
+      activeCmp,
     };
   },
 });
@@ -194,7 +267,7 @@ export default defineComponent({
     </ul>
     <!--/tabs -->
 
-    <!-- sections -->
+    <!-- sections 
     <fieldset :disabled="data.questionnaireComplete" class="mt-4">
       <transition-fade>
         <KeepAlive>
@@ -208,6 +281,34 @@ export default defineComponent({
         </KeepAlive>
       </transition-fade>
     </fieldset>
+    -->
+
+    <!-- external start -->
+    <fieldset :disabled="data.questionnaireComplete" class="mt-4">
+      <FormulateForm
+        v-model="store.formModel"
+        @submit="handleSubmit"
+        ref="formRef"
+        @input="onInput"
+        @validation="validation"
+      >
+        <transition-fade>
+          <KeepAlive>
+            <component
+              :is="activeComponent"
+              ref="appRef"
+              :customCollections="store.customCollections"
+              :defaultCollections="store.defaultCollections"
+              @handleSubmit="handleSubmit"
+              @dataChange="dataChange"
+              @isSectionComplete="isSectionComplete"
+            >
+            </component>
+          </KeepAlive>
+        </transition-fade>
+      </FormulateForm>
+    </fieldset>
+    <!-- external end -->
 
     <button @click="nextClick" class="col btn btn-primary ml-2" v-if="false">
       Submit
@@ -217,7 +318,9 @@ export default defineComponent({
     <button @click="populateData">Get data</button>
     -->
 
-    <pre>{{ store.formModel }}</pre>
+    <!--
+    <p>store.formModel</p>
+    <pre>{{ store.formModel }}</pre>-->
   </div>
 </template>
 
@@ -236,6 +339,10 @@ ul.nav.nav-tabs {
       }
     }
   }
+}
+
+.formulate-input .formulate-input-element {
+  max-width: none !important;
 }
 
 [data-classification="text"][data-is-showing-errors="true"],
