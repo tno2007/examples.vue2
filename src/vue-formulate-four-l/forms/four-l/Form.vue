@@ -102,6 +102,8 @@ export default defineComponent({
     };
 
     onMounted(async () => {
+      console.log("Form.onMounted");
+
       getCollections();
       populateData();
     });
@@ -109,10 +111,12 @@ export default defineComponent({
     const getCollections = () => {
       let url =
         "http://local-webservices.1stcontact.com/odataformapi/api/collection";
+      url = "http://localhost/Examples.NetFx.CrmODataFormApi/api/collection";
+      url = "http://localhost:3001/db";
       fetch(url)
         .then((response) => response.json())
         .then((data) => {
-          store.collections = data;
+          store.customCollections = data;
         });
     };
 
@@ -120,6 +124,8 @@ export default defineComponent({
       // mimic getting data from an api
       var url =
         "http://local-webservices.1stcontact.com/odataformapi/api/fourl";
+      url = "http://localhost/Examples.NetFx.CrmODataFormApi/api/fourl";
+      url = "http://localhost:3002/db";
       fetch(url)
         .then((response) => response.json())
         .then((data) => {
@@ -130,13 +136,20 @@ export default defineComponent({
 
           //console.log("store.formModel", store.formModel);
 
-          console.log("store.formModel", store.formModel);
+          // console.log("data", data);
 
           // convert api data to a vue-formulate format (grouped keys becomes arrays)
-          model.value = toVueFormulateFormat(store.formModel, []);
+
+          let parse1 = toVueFormulateFormat(data, ["currentPartner.info"]);
+          let parse2 = toVueFormulateFormat(parse1, ["currentPartner.address"]);
+          let vfModel = toVueFormulateFormat(parse2, ["currentPartner"]);
           //console.log("model.value", model.value);
 
-          store.formModel = data;
+          console.log("vfModel", vfModel);
+
+          //store.formModel = data;
+
+          store.formModel = vfModel;
         });
     };
 
@@ -184,13 +197,15 @@ export default defineComponent({
     <!-- sections -->
     <fieldset :disabled="data.questionnaireComplete" class="mt-4">
       <transition-fade>
-        <component
-          :is="activeComponent"
-          ref="appRef"
-          @handleSubmit="handleSubmit"
-          @isSectionComplete="isSectionComplete"
-        >
-        </component>
+        <KeepAlive>
+          <component
+            :is="activeComponent"
+            ref="appRef"
+            @handleSubmit="handleSubmit"
+            @isSectionComplete="isSectionComplete"
+          >
+          </component>
+        </KeepAlive>
       </transition-fade>
     </fieldset>
 

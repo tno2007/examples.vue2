@@ -88,7 +88,7 @@ export default defineComponent({
           name="new_country"
           label="Country:"
           :validation="[['required']]"
-          :options="store.collections.countries"
+          :options="store.customCollections.countries"
         ></FormulateInput>
         <FormulateInput
           type="text"

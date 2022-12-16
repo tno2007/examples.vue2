@@ -4,20 +4,28 @@ import {
   IPartner,
   IBiometricEnrollment,
   IReferee,
+  ICurrentPartner,
 } from "./IFormModel";
 
-export class FormModel implements IFormModel {
+//export class FormModel implements IFormModel {
+/*
   addressHistory: IAddress[];
-  partners: IPartner[];
+  currentPartner: ICurrentPartner[];
+  previousPartners: IPartner[];
   referees: IReferee[];
   biometricEnrollment: IBiometricEnrollment;
 
   constructor() {
     this.addressHistory = [];
-    this.partners = [];
+    this.currentPartner = [
+      info: [],
+      address: [],
+    ];
+    this.previousPartners = [];
     this.referees = [];
     this.biometricEnrollment = {
       new_biometricenrolmentid: null,
     };
   }
-}
+  */
+//}

@@ -1,6 +1,7 @@
 export interface IFormModel {
   addressHistory: IAddress[];
-  partners: IPartner[];
+  currentPartner: ICurrentPartner;
+  previousPartners: IPartner[];
   referees: IReferee[];
   biometricEnrollment: IBiometricEnrollment;
 }
@@ -49,15 +50,44 @@ export interface IBiometricEnrollment {
 }
 
 export interface IAddress {
-  new_fromdate: string | null;
-  new_todate: string | null;
-  new_iscurrent: boolean | null;
+  new_fromdate?: string | null;
+  new_todate?: string | null;
+  new_iscurrent?: boolean | null;
   country?: number | null;
   addressline1?: string | null;
   addressline2?: string | null;
   posttownorcity?: string | null;
   stateorprovince?: string | null;
   postalcode?: string | null;
+}
+
+export interface IInfo {
+  statecode?: number;
+  createdon?: string;
+  new_relationship?: number;
+  new_dateofbirth?: string;
+  new_forename?: string;
+  new_middlename?: any;
+  new_surname?: string;
+  new_iscurrent?: boolean;
+  new_villagetownorcity?: string;
+  new_visadependentid?: string;
+  new_knownbyothernames?: boolean;
+  _new_4lquestionnaireid_value?: string;
+  new_citizenshipdate?: any;
+  new_dateofmarriage?: any;
+  new_partnershipplace?: any;
+  new_partnershipenddate?: any;
+  new_partnershipendreason?: any;
+  new_partnershipendplace?: any;
+  _new_dependentid_value?: any;
+  new_countryofbirth?: any;
+  new_passport?: any;
+}
+
+export interface ICurrentPartner {
+  info: IInfo[];
+  address: IAddress[];
 }
 
 export interface IPartner {
