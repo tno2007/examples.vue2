@@ -5,7 +5,7 @@ import FormJson from "./forms/four-l/FormJson.vue";
 
 <template>
   <div id="app">
-    <Form />
+    <FormJson />
   </div>
 </template>
 

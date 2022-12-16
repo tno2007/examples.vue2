@@ -63,7 +63,7 @@ export default defineComponent({
           class: "mb-4",
         },
         {
-          type: "group",
+          type: "customgroup",
           repeatable: true,
           name: "influencers",
           addLabel: "+ influencers",
@@ -75,17 +75,19 @@ export default defineComponent({
               class: "pt-2 pb-2",
             },
             {
-              name: "country",
-              label: "Country $index",
+              name: "First name",
+              label: "First name $index",
+            },
+          ],
+          groupChildren: [
+            {
+              component: "h5",
+              children: "Address $index",
+              class: "pt-2 pb-2",
             },
             {
-              name: "addressline1",
-              label: "Address",
-              placeholder: "Address line 1",
-            },
-            {
-              name: "addressline2",
-              placeholder: "Address line 2",
+              name: "First name",
+              label: "First name $index",
             },
           ],
         },

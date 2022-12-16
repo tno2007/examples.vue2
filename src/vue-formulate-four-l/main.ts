@@ -9,6 +9,9 @@ import "@braid/vue-formulate/themes/snow/snow.scss";
 import YearMonthDayFormulateInput from "./components/common/vf/custom/src/inputs/YearMonthDayFormulateInput.vue";
 Vue.component("YearMonthDayFormulateInput", YearMonthDayFormulateInput);
 
+import CustomGroupFormulateInput from "./components/common/vf/custom/src/inputs/CustomGroupFormulateInput.vue";
+Vue.component("CustomGroupFormulateInput", CustomGroupFormulateInput);
+
 Vue.use(PiniaVuePlugin);
 
 Vue.use(VueFormulate, {
@@ -29,6 +32,13 @@ Vue.use(VueFormulate, {
       component: "YearMonthDayFormulateInput",
       slotProps: {
         component: ["format"],
+      },
+    },
+    customgroup: {
+      classification: "box",
+      component: "CustomGroupFormulateInput",
+      slotProps: {
+        component: ["groupChildren"],
       },
     },
   },
