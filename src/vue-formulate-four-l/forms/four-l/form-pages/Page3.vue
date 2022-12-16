@@ -89,73 +89,103 @@ export default defineComponent({
         #default="{ index }"
         add-label="+ Add another referee"
       >
-        <h5 class="pt-2 pb-2">Referee ({{ index + 1 }})</h5>
-        <FormulateInput
-          type="text"
-          name="FirstName"
-          label="First name:"
-          :validation="[['required']]"
-        ></FormulateInput>
-        <FormulateInput
-          type="text"
-          name="LastName"
-          label="Last name:"
-          :validation="[['required']]"
-        ></FormulateInput>
-        <FormulateInput
-          type="yearmonthday"
-          name="dateofbirth"
-          label="Date of birth:"
-          :validation="[['required']]"
-        ></FormulateInput>
+        <FormulateInput type="group" name="info">
+          <h5 class="pt-2 pb-2">Referee ({{ index + 1 }})</h5>
+          <FormulateInput
+            type="text"
+            name="new_firstname"
+            label="First name:"
+            :validation="[['required']]"
+          ></FormulateInput>
+          <FormulateInput
+            type="text"
+            name="new_lastname"
+            label="Last name:"
+            :validation="[['required']]"
+          ></FormulateInput>
+          <FormulateInput
+            type="yearmonthday"
+            name="new_dateofbirth"
+            label="Date of birth:"
+            :validation="[['required']]"
+          ></FormulateInput>
+          <FormulateInput
+            type="radio"
+            name="new_gender"
+            label="Sex:"
+            :validation="[['required']]"
+            :options="data.collections.gender"
+          ></FormulateInput>
+          <FormulateInput
+            type="text"
+            name="dayTimeTelephone"
+            label="Day time telephone number:"
+            :validation="[['required']]"
+          ></FormulateInput>
+          <FormulateInput
+            type="text"
+            name="emailAddress"
+            label="Email address:"
+            :validation="[['required']]"
+          ></FormulateInput>
+          <FormulateInput
+            type="radio"
+            name="havePassport"
+            label="Have passport:"
+            :validation="[['required']]"
+            :options="data.collections.boolean"
+          ></FormulateInput>
+          <FormulateInput
+            type="text"
+            name="passportNumber"
+            label="Passport number:"
+            :validation="[['required']]"
+          ></FormulateInput>
+        </FormulateInput>
+        <FormulateInput type="group" name="address">
+          <FormulateInput
+            type="select"
+            name="new_country"
+            label="Country:"
+            :validation="[['required']]"
+            :options="store.customCollections.countries"
+          ></FormulateInput>
+          <FormulateInput
+            type="text"
+            name="new_addressline1"
+            label="Address:"
+            :validation="[['required']]"
+            placeholder="Address line 1"
+          ></FormulateInput>
+          <FormulateInput
+            type="text"
+            name="new_addressline2"
+            :validation="[['required']]"
+            placeholder="Address line 2"
+          ></FormulateInput>
+          <FormulateInput
+            type="text"
+            name="new_posttownorcity"
+            label="Post town / city:"
+            :validation="[['required']]"
+          ></FormulateInput>
+          <FormulateInput
+            type="text"
+            name="new_stateorprovince"
+            label="State / Province:"
+            :validation="[['required']]"
+          ></FormulateInput>
+          <FormulateInput
+            type="text"
+            name="new_postalcode"
+            label="Postal code:"
+            :validation="[['required']]"
+          ></FormulateInput>
+        </FormulateInput>
+
         <FormulateInput
           type="radio"
-          name="sex"
-          label="Sex:"
-          :validation="[['required']]"
-          :options="data.collections.gender"
-        ></FormulateInput>
-        <FormulateInput
-          type="select"
-          name="country"
-          label="Country:"
-          :validation="[['required']]"
-          :options="data.collections.country"
-        ></FormulateInput>
-        <FormulateInput
-          type="text"
-          name="addressline1"
-          label="Address:"
-          :validation="[['required']]"
-          placeholder="Address line 1"
-        ></FormulateInput>
-        <FormulateInput
-          type="text"
-          name="addressline2"
-          :validation="[['required']]"
-          placeholder="Address line 2"
-        ></FormulateInput>
-        <FormulateInput
-          type="text"
-          name="posttownorcity"
-          label="Post town / city:"
-          :validation="[['required']]"
-        ></FormulateInput>
-        <FormulateInput
-          type="text"
-          name="stateorprovince"
-          label="State / Province:"
-          :validation="[['required']]"
-        ></FormulateInput>
-        <FormulateInput
-          type="text"
-          name="postalcode"
-          label="Postal code:"
-          :validation="[['required']]"
-        ></FormulateInput>
-        <FormulateInput
-          type="radio"
-          name="beenAtThisAddressMoreThanThreeYears"
+          name="new_ataddresslessthan3years"
           label="Been at this address for more than three years:"
           :validation="[['required']]"
           :options="data.collections.boolean"
@@ -167,8 +197,8 @@ export default defineComponent({
           #default="{ index }"
           add-label="+ Add another previous address"
           v-if="
-            data.model.referees &&
-            data.model.referees[0].beenAtThisAddressMoreThanThreeYears == 'true'
+            store.formModel.referees &&
+            store.formModel.referees[0].new_ataddresslessthan3years == 'true'
           "
         >
           <h5 class="pt-2 pb-2">Previous address ({{ index + 1 }})</h5>
@@ -211,31 +241,6 @@ export default defineComponent({
             :validation="[['required']]"
           ></FormulateInput>
         </FormulateInput>
-        <FormulateInput
-          type="text"
-          name="dayTimeTelephone"
-          label="Day time telephone number:"
-          :validation="[['required']]"
-        ></FormulateInput>
-        <FormulateInput
-          type="text"
-          name="emailAddress"
-          label="Email address:"
-          :validation="[['required']]"
-        ></FormulateInput>
-        <FormulateInput
-          type="radio"
-          name="havePassport"
-          label="Have passport:"
-          :validation="[['required']]"
-          :options="data.collections.boolean"
-        ></FormulateInput>
-        <FormulateInput
-          type="text"
-          name="passportNumber"
-          label="Passport number:"
-          :validation="[['required']]"
-        ></FormulateInput>
       </FormulateInput>
     </FormulateForm>
     <pre>{{ data.model }}</pre>

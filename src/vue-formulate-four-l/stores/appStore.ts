@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { FormModel } from "../typings/FormModel";
+//\ccoimport { FormModel } from "../typings/FormModel";
 
 interface Collection {
   Code: string;
@@ -9,8 +9,8 @@ interface Collection {
 export const useAppStore = defineStore({
   id: "counter",
   state: () => ({
-    formModel: new FormModel(),
-    collections: {
+    formModel: {} as any,
+    customCollections: {
       countries: [],
     },
     defaultCollections: {
