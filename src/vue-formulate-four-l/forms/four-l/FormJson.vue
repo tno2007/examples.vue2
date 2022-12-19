@@ -14,6 +14,7 @@ import Page3 from "./form-pages/Page3.vue";
 import Page4 from "./form-pages/Page4.vue";
 import { toVueFormulateFormat } from "../../common/composables/useFormHelper";
 import logicalDataModel from "../../data/logical-data-model";
+import MyTSX from "./form-pages/MyTsx";
 
 export default defineComponent({
   components: {
@@ -21,6 +22,7 @@ export default defineComponent({
     Page2,
     Page3,
     Page4,
+    MyTSX,
   },
   setup(props, context) {
     const store = useAppStore();
@@ -63,44 +65,48 @@ export default defineComponent({
           class: "mb-4",
         },
         {
-          type: "customgroup",
-          repeatable: true,
-          name: "influencers",
-          addLabel: "+ influencers",
-          default: "",
+          component: "div",
           children: [
             {
-              component: "h5",
-              children: "Address $index",
-              class: "pt-2 pb-2",
+              component: "p",
+              children: "take me",
             },
             {
-              name: "First name",
-              label: "First name $index",
-            },
-          ],
-          groupChildren: [
-            {
-              component: "h5",
-              children: "Address $index",
-              class: "pt-2 pb-2",
-            },
-            {
-              name: "First name",
-              label: "First name $index",
+              component: "p",
+              children: "to your leader",
             },
           ],
         },
+        /*
+        {
+          type: "customgroup",
+          repeatable: true,
+          name: "influencers",
+          addLabel: "Add influencers",
+          groupChildren: [
+            {
+              component: "h5",
+              children: "Person",
+            },
+            {
+              name: "First name",
+              label: "First name",
+            },
+          ],
+        },*/
         {
           type: "group",
           repeatable: true,
           name: "people",
-          addLabel: "+ Address",
-          default: "",
+          addLabel: "Add person",
           children: [
             {
+              component: "h5",
+              children: "Person",
+            },
+            {
               name: "First name",
-              label: "First name $index",
+              label: "First name",
             },
           ],
         },
@@ -264,6 +270,8 @@ export default defineComponent({
 
 <template>
   <div class="p-5">
+    <MyTSX />
+
     <!-- tabs -->
     <ul class="nav nav-tabs">
       <li class="nav-item" v-for="(t, index) in data.tabs">

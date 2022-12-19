@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang="tsx">
 interface ISelectOption {
   label: string;
   id: string | number;
@@ -12,6 +12,7 @@ import {
   watch,
   onMounted,
   nextTick,
+  h,
 } from "vue";
 
 const app = defineComponent({
@@ -77,11 +78,32 @@ const app = defineComponent({
       console.log("ctx", props.context);
     });
 
+    /*
     return {
       data,
       model,
       props,
     };
+    */
+
+    //return () => h("div", "this is rendered by h");
+
+    const items = [
+      {
+        id: 1,
+        text: "hello",
+      },
+    ];
+
+    //return () => h("Formu//lateInput");
+
+    return (
+      <ul>
+        {items.map(({ id, text }) => {
+          return <li key={id}>{text}</li>;
+        })}
+      </ul>
+    );
   },
 });
 
@@ -94,15 +116,30 @@ export default app;
     :class="context.classes.element"
     :data-type="context.type"
   >
-    <FormulateInput type="checkbox" name="curr"></FormulateInput>
+    <template
+      v-for="(child, index) in props.context.slotProps.component.groupChildren"
+    >
+      <template v-if="child.component">
+        <component :is="child.component">{{
+          child.children.replace("$index", index)
+        }}</component>
+      </template>
+    </template>
+
     <!-- from the json -->
     <FormulateInput
       type="group"
       :repeatable="true"
-      name="addressHistory"
+      :name="props.context.name"
       #default="{ index }"
       :add-label="props.context.addLabel"
     >
+      <!--  -->
+      <!--
+        in here render the group children, recursively
+        You might have to put the type=group in a render function itse;f
+      -->
+
       <!-- from the json -->
       <h5>
         {{ `Previous address (${index})` }}

@@ -30,6 +30,7 @@
     "@morev/vue-transitions": "^2.2.1",
     "@popperjs/core": "^2.11.5",
     "@types/lodash": "^4.14.182",
+    "@vitejs/plugin-vue2-jsx": "^1.1.0",
     "ajv": "^8.11.0",
     "axios": "^0.27.2",
     "bootstrap": "^5.1.3",

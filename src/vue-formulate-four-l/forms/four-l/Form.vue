@@ -15,11 +15,12 @@ Now that its in one place, I can create a common function for it
 <script lang="ts">
 import { onMounted, ref, defineComponent, reactive, computed } from "vue";
 import { useAppStore } from "../../stores/appStore";
+
 import Page1 from "./form-pages/Page1.vue";
 import Page2 from "./form-pages/Page2.vue";
 import Page3 from "./form-pages/Page3.vue";
 import Page4 from "./form-pages/Page4.vue";
-import Page4External from "./form-pages/Page4External.vue";
+
 import {
   set,
   toVueFormulateFormat,
@@ -33,8 +34,6 @@ export default defineComponent({
     Page2,
     Page3,
     Page4,
-    Page4External,
-    Test,
   },
   setup(props, context) {
     const store = useAppStore();
@@ -43,15 +42,9 @@ export default defineComponent({
       questionnaireComplete: false,
       tabs: [
         {
-          label: "Start here",
-          componentName: "Page4External",
-          active: true,
-          completed: false,
-        },
-        {
           label: "Address history",
           componentName: "Page1",
-          active: false,
+          active: true,
           completed: false,
         },
         {
@@ -136,7 +129,7 @@ export default defineComponent({
       let url =
         "http://local-webservices.1stcontact.com/odataformapi/api/collection";
       //url = "http://localhost/Examples.NetFx.CrmODataFormApi/api/collection";
-      //url = "http://localhost:3001/db";
+      url = "http://localhost:3001/db";
       fetch(url)
         .then((response) => response.json())
         .then((data) => {
@@ -149,7 +142,7 @@ export default defineComponent({
       var url =
         "http://local-webservices.1stcontact.com/odataformapi/api/fourl";
       //url = "http://localhost/Examples.NetFx.CrmODataFormApi/api/fourl";
-      //url = "http://localhost:3002/db";
+      url = "http://localhost:3002/db";
       fetch(url)
         .then((response) => response.json())
         .then((data) => {
@@ -239,6 +232,7 @@ export default defineComponent({
       validation,
       dataChange,
       activeCmp,
+      activeIndex,
     };
   },
 });
@@ -289,23 +283,12 @@ export default defineComponent({
         v-model="store.formModel"
         @submit="handleSubmit"
         ref="formRef"
-        @input="onInput"
         @validation="validation"
       >
-        <transition-fade>
-          <KeepAlive>
-            <component
-              :is="activeComponent"
-              ref="appRef"
-              :customCollections="store.customCollections"
-              :defaultCollections="store.defaultCollections"
-              @handleSubmit="handleSubmit"
-              @dataChange="dataChange"
-              @isSectionComplete="isSectionComplete"
-            >
-            </component>
-          </KeepAlive>
-        </transition-fade>
+        <Page1 v-show="activeIndex == 0" />
+        <Page2 v-show="activeIndex == 1" />
+        <Page3 v-show="activeIndex == 2" />
+        <Page4 v-show="activeIndex == 3" />
       </FormulateForm>
     </fieldset>
     <!-- external end -->

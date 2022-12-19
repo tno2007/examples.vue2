@@ -35,7 +35,7 @@ Vue.use(VueFormulate, {
       },
     },
     customgroup: {
-      classification: "box",
+      classification: "groupx",
       component: "CustomGroupFormulateInput",
       slotProps: {
         component: ["groupChildren"],

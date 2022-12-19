@@ -19,7 +19,7 @@
     }
   ],
   "currentPartner": {
-	"id": "e5a94d3a-5e74-ed11-8d29-00155d001d0b",
+    "id": "e5a94d3a-5e74-ed11-8d29-00155d001d0b",
     "info": {
       "statecode": 0,
       "createdon": "2022-12-05T05:32:38Z",
@@ -31,7 +31,7 @@
       "new_iscurrent": true,
       "new_villagetownorcity": "False",
       "new_visadependentid": "e5a94d3a-5e74-ed11-8d29-00155d001d0b",
-      "new_knownbyothernames": "false",
+      "new_knownbyothernames": "False",
       "_new_4lquestionnaireid_value": "c930fda7-5973-ed11-8d29-00155d001d0b",
       "new_citizenshipdate": null,
       "new_dateofmarriage": null,
@@ -42,7 +42,7 @@
       "_new_dependentid_value": null,
       "new_countryofbirth": null,
       "new_passport": null,
-	  "new_naturalisedbritishcitizen": "false"
+      "new_naturalisedbritishcitizen": false
     },
     "address": {
       "statecode": 0,
@@ -74,7 +74,7 @@
       "new_iscurrent": false,
       "new_villagetownorcity": "False",
       "new_visadependentid": "019ddbec-377a-ed11-8d2a-00155d001d0b",
-      "new_knownbyothernames": "false",
+      "new_knownbyothernames": "False",
       "_new_4lquestionnaireid_value": "c930fda7-5973-ed11-8d29-00155d001d0b",
       "new_citizenshipdate": null,
       "new_dateofmarriage": null,
@@ -84,13 +84,14 @@
       "new_partnershipendplace": null,
       "_new_dependentid_value": null,
       "new_countryofbirth": null,
-      "new_passport": null
+      "new_passport": null,
+      "new_naturalisedbritishcitizen": false
     }
   ],
   "referees": [
     {
-      "id": "2b3a8b14-5c75-ed11-8d29-00155d001d0b",
-      "info": {
+      "Id": "2b3a8b14-5c75-ed11-8d29-00155d001d0b",
+      "Info": {
         "statecode": 0,
         "createdon": "2022-12-06T11:49:47Z",
         "new_refereeid": "2b3a8b14-5c75-ed11-8d29-00155d001d0b",
@@ -105,23 +106,25 @@
         "new_dateofbirth": null,
         "new_gender": null
       },
-      "address": {
-        "statecode": 0,
-        "createdon": "2022-12-15T19:01:40Z",
-        "_new_4lquestionnaireid_value": "c930fda7-5973-ed11-8d29-00155d001d0b",
-        "new_addressid": "03a3c0e7-aa7c-ed11-8d2d-00155d001d0b",
-        "new_fromdate": "2010-01-01T00:00:00",
-        "new_todate": "2015-12-01T00:00:00",
-        "new_country": 5453,
-        "new_addressline1": "66 Gladstone, Boston",
-        "new_addressline2": null,
-        "new_posttownorcity": "Cape Towm",
-        "new_postalcode": "7530",
-        "new_stateorprovince": "Western Cape",
-        "new_iscurrent": true,
-        "_new_refereeid_value": "2b3a8b14-5c75-ed11-8d29-00155d001d0b",
-        "_new_partnerid_value": null
-      }
+      "Addresses": [
+        {
+          "statecode": 0,
+          "createdon": "2022-12-15T19:01:40Z",
+          "_new_4lquestionnaireid_value": "c930fda7-5973-ed11-8d29-00155d001d0b",
+          "new_addressid": "03a3c0e7-aa7c-ed11-8d2d-00155d001d0b",
+          "new_fromdate": "2010-01-01T00:00:00",
+          "new_todate": "2015-12-01T00:00:00",
+          "new_country": 5453,
+          "new_addressline1": "66 Gladstone, Boston",
+          "new_addressline2": null,
+          "new_posttownorcity": "Cape Towm",
+          "new_postalcode": "7530",
+          "new_stateorprovince": "Western Cape",
+          "new_iscurrent": true,
+          "_new_refereeid_value": "2b3a8b14-5c75-ed11-8d29-00155d001d0b",
+          "_new_partnerid_value": null
+        }
+      ]
     }
   ],
   "biometricEnrollment": [
@@ -142,10 +145,10 @@
       "new_stolenpolicestation": null,
       "new_brpissuedate": null,
       "new_brpissueplace": null,
-      "new_brpnumber": null,
+      "new_brpnumber": "9876543210",
       "new_stolendatereportedtothepolice": null,
       "new_fingerprintstakenwhereabouts": null,
-      "new_brplocation": null,
+      "new_brplocation": 100000001,
       "new_stolenpolicereportnumber": null,
       "new_applicationmadeabroaddetails": null,
       "new_fingerpintstakencountry": null,
