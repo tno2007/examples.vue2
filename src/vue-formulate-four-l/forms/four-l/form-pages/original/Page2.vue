@@ -71,9 +71,9 @@ export default defineComponent({
             name="isorhaveothernames_moredetail"
             label="Have your partner been known by any name or names apart from what is mentioned above?"
             :validation="[['required']]"
-            v-if="
-              store.formModel.currentPartner[0].info[0].new_knownbyothernames ==
-              new Boolean(true).toString()
+            x-v-if="
+              store.formModel.currentPartner[0]?.info[0]
+                ?.new_knownbyothernames == new Boolean(true).toString()
             "
           ></FormulateInput>
           <FormulateInput
@@ -85,7 +85,7 @@ export default defineComponent({
           <FormulateInput
             type="text"
             name="new_villagetownorcity"
-            label="Partner’s village, town or city:"
+            label="Partner's village, town or city:"
             :validation="[['required']]"
             v-if="false"
           ></FormulateInput>
@@ -116,8 +116,8 @@ export default defineComponent({
             name="new_citizenshipdate"
             label="Enter date they were granted this citizenship:"
             :validation="[['required']]"
-            v-if="
-              store.formModel.currentPartner[0].info[0]
+            x-v-if="
+              store.formModel.currentPartner[0]?.info[0]
                 .new_naturalisedbritishcitizen == new Boolean(true).toString()
             "
           ></FormulateInput>
@@ -126,8 +126,8 @@ export default defineComponent({
             name="new_citizenshipcertificatereference"
             label="Their citizenship certificate reference number:"
             :validation="[['required']]"
-            v-if="
-              store.formModel.currentPartner[0].info[0]
+            x-v-if="
+              store.formModel.currentPartner[0]?.info[0]
                 .new_naturalisedbritishcitizen == new Boolean(true).toString()
             "
           ></FormulateInput>
