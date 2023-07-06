@@ -18,7 +18,8 @@
     "vanilla-bootstrap-5": "scripty",
     "vue-vanilla-ladda": "scripty",
     "vue-formulate-json-submit": "scripty",
-    "toast-test": "scripty"
+    "toast-test": "scripty",
+    "vue-formulate-scroll-to-error": "scripty"
   },
   "dependencies": {
     "@braid/vue-formulate": "^2.5.3",

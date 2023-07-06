@@ -68,44 +68,6 @@ export default defineComponent({
         :validation="[['required']]"
       ></FormulateInput>
       <FormulateInput
-        type="radio"
-        name="new_brplocation"
-        label="Location of BRP:"
-        :validation="[['required']]"
-        :options="customCollections.brplocations"
-      ></FormulateInput>
-      <FormulateInput
-        type="textarea"
-        name="new_returnedreasonsenttous"
-        label="Reason sent to us:"
-        :validation="[['required']]"
-        v-if="model[index]?.new_brplocation == new Number(100000000).toString()"
-      ></FormulateInput>
-    </FormulateInput>
-
-    <!--
-    <FormulateInput type="group" name="biometricEnrollment">
-      <FormulateInput
-        type="radio"
-        name="new_brpissued"
-        label="Have you been issued with a
-          biometric residence permit?"
-        :validation="[['required']]"
-        :options="store.defaultCollections.boolean"
-      ></FormulateInput>
-      <FormulateInput
-        type="text"
-        name="new_brpnumber"
-        label="BRP Number"
-        :validation="[['required']]"
-      ></FormulateInput>
-      <FormulateInput
-        type="yearmonthday"
-        name="new_brpissuedate"
-        label="Issue date"
-        :validation="[['required']]"
-      ></FormulateInput>
-      <FormulateInput
         type="yearmonthday"
         name="new_brpexpirydate"
         label="Expiry date"
@@ -122,36 +84,21 @@ export default defineComponent({
         name="new_brpenclosed"
         label="BRP enclosed?"
         :validation="[['required']]"
-        :options="store.defaultCollections.boolean"
+        :options="defaultCollections.boolean"
       ></FormulateInput>
       <FormulateInput
         type="radio"
         name="new_brplocation"
-        label="Location ofB BRP:"
+        label="Location of BRP:"
         :validation="[['required']]"
-        :options="store.customCollections.BrpLocations"
+        :options="customCollections.brplocations"
       ></FormulateInput>
-
       <FormulateInput
         type="textarea"
         name="new_returnedreasonsenttous"
         label="Reason sent to us:"
         :validation="[['required']]"
-        v-if="
-          store.formModel.biometricEnrollment[0].new_brplocation ==
-          new Number(100000000).toString()
-        "
-      ></FormulateInput>
-
-      <FormulateInput
-        type="yearmonthday"
-        name="new_returneddatesendtous"
-        label="Date it was sent to us:"
-        :validation="[['required']]"
-        v-if="
-          store.formModel.biometricEnrollment[0].new_brplocation ==
-          new Number(100000000).toString()
-        "
+        v-if="model[index]?.new_brplocation == new Number(100000000).toString()"
       ></FormulateInput>
 
       <FormulateInput
@@ -159,10 +106,7 @@ export default defineComponent({
         name="new_lostdatereportedbrp"
         label="Date this was reported to the Home Office:"
         :validation="[['required']]"
-        v-if="
-          store.formModel.biometricEnrollment[0].new_brplocation ==
-          new Number(100000001).toString()
-        "
+        v-if="model[index]?.new_brplocation == new Number(100000001).toString()"
       ></FormulateInput>
 
       <FormulateInput
@@ -170,10 +114,7 @@ export default defineComponent({
         name="new_stolenpolicereportnumber"
         label="Police report number:"
         :validation="[['required']]"
-        v-if="
-          store.formModel.biometricEnrollment[0].new_brplocation ==
-          new Number(100000002).toString()
-        "
+        v-if="model[index]?.new_brplocation == new Number(100000002).toString()"
       ></FormulateInput>
 
       <FormulateInput
@@ -181,10 +122,7 @@ export default defineComponent({
         name="new_stolencrimereferencenumber"
         label="Crime reference number:"
         :validation="[['required']]"
-        v-if="
-          store.formModel.biometricEnrollment[0].new_brplocation ==
-          new Number(100000002).toString()
-        "
+        v-if="model[index]?.new_brplocation == new Number(100000002).toString()"
       ></FormulateInput>
 
       <FormulateInput
@@ -192,10 +130,7 @@ export default defineComponent({
         name="new_stolenpolicestation"
         label="Police station:"
         :validation="[['required']]"
-        v-if="
-          store.formModel.biometricEnrollment[0].new_brplocation ==
-          new Number(100000002).toString()
-        "
+        v-if="model[index]?.new_brplocation == new Number(100000002).toString()"
       ></FormulateInput>
 
       <FormulateInput
@@ -203,10 +138,7 @@ export default defineComponent({
         name="new_stolendatereportedtothepolice"
         label="Date reported to the Police:"
         :validation="[['required']]"
-        v-if="
-          store.formModel.biometricEnrollment[0].new_brplocation ==
-          new Number(100000002).toString()
-        "
+        v-if="model[index]?.new_brplocation == new Number(100000002).toString()"
       ></FormulateInput>
 
       <FormulateInput
@@ -214,10 +146,7 @@ export default defineComponent({
         name="new_otherreasonunabletoprovidebrp"
         label="Please give details why you are unable to provide it:"
         :validation="[['required']]"
-        v-if="
-          store.formModel.biometricEnrollment[0].new_brplocation ==
-          new Number(100000003).toString()
-        "
+        v-if="model[index]?.new_brplocation == new Number(100000003).toString()"
       ></FormulateInput>
 
       <FormulateInput
@@ -225,7 +154,7 @@ export default defineComponent({
         name="new_hadfingerprintstakenpartofimmigrationapp"
         label="Have you had your fingerprints taken as part of a previous UK or British Overseas Territory immigration application made in the UK, a British Overseas Territory or abroad?"
         :validation="[['required']]"
-        :options="store.defaultCollections.boolean"
+        :options="defaultCollections.boolean"
       ></FormulateInput>
 
       <FormulateInput
@@ -234,8 +163,7 @@ export default defineComponent({
         label="Date your fingerprints were taken:"
         :validation="[['required']]"
         v-if="
-          store.formModel.biometricEnrollment[0]
-            .new_hadfingerprintstakenpartofimmigrationapp ==
+          model[index]?.new_hadfingerprintstakenpartofimmigrationapp ==
           new Boolean(true).toString()
         "
       ></FormulateInput>
@@ -245,10 +173,9 @@ export default defineComponent({
         name="new_fingerprintstakenwhereabouts"
         label="Give details where your fingerprints were taken:"
         :validation="[['required']]"
-        :options="store.customCollections.BrpLocations"
+        :options="customCollections.BrpLocations"
         v-if="
-          store.formModel.biometricEnrollment[0]
-            .new_hadfingerprintstakenpartofimmigrationapp ==
+          model[index]?.new_hadfingerprintstakenpartofimmigrationapp ==
           new Boolean(true).toString()
         "
       ></FormulateInput>
@@ -259,8 +186,7 @@ export default defineComponent({
         label="City or town where prints was taken:"
         :validation="[['required']]"
         v-if="
-          store.formModel.biometricEnrollment[0]
-            .new_hadfingerprintstakenpartofimmigrationapp ==
+          model[index]?.new_hadfingerprintstakenpartofimmigrationapp ==
           new Boolean(true).toString()
         "
       ></FormulateInput>
@@ -270,10 +196,9 @@ export default defineComponent({
         name="new_fingerpintstakencountry"
         label="Country where prints was taken:"
         :validation="[['required']]"
-        :options="store.customCollections.countries"
+        :options="customCollections.countries"
         v-if="
-          store.formModel.biometricEnrollment[0]
-            .new_hadfingerprintstakenpartofimmigrationapp ==
+          model[index]?.new_hadfingerprintstakenpartofimmigrationapp ==
           new Boolean(true).toString()
         "
       ></FormulateInput>
@@ -292,13 +217,12 @@ applications was or were made abroad:"
         label="Do you have a medical or physical condition which may require special arrangements for
 your biometrics to be recorded?"
         :validation="[['required']]"
-        :options="store.defaultCollections.boolean"
+        :options="defaultCollections.boolean"
       ></FormulateInput>
 
       <p
         v-if="
-          store.formModel.biometricEnrollment[0]
-            .new_medicalorphysicalconditionforspecialneeds ==
+          model[index]?.new_medicalorphysicalconditionforspecialneeds ==
           new Boolean(true).toString()
         "
       >
@@ -308,6 +232,5 @@ your biometrics to be recorded?"
         necessary.
       </p>
     </FormulateInput>
-    -->
   </div>
 </template>

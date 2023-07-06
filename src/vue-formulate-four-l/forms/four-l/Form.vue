@@ -16,16 +16,15 @@ Now that its in one place, I can create a common function for it
 import { onMounted, ref, defineComponent, reactive, computed } from "vue";
 import { useAppStore } from "../../stores/appStore";
 
-import Page1 from "./form-pages/Page1.vue";
-import Page2 from "./form-pages/Page2.vue";
-import Page3 from "./form-pages/Page3.vue";
-import Page4 from "./form-pages/Page4.vue";
+import Page1 from "./form-pages/other/Page1.vue";
+import Page2 from "./form-pages/other/Page2.vue";
+import Page3 from "./form-pages/other/Page3.vue";
+import Page4 from "./form-pages/other/Page4.vue";
 
 import {
   set,
   toVueFormulateFormat,
 } from "../../common/composables/useFormHelper";
-import Test from "./Test.vue";
 import { get } from "get-wild";
 
 export default defineComponent({
@@ -36,6 +35,7 @@ export default defineComponent({
     Page4,
   },
   setup(props, context) {
+    const formRef = ref<any>(null);
     const store = useAppStore();
 
     const data = reactive({
@@ -66,18 +66,70 @@ export default defineComponent({
           completed: false,
         },
       ],
+      clickedIndex: -1,
     });
-
-    const tabClick = async (clickedIndex: number) => {
-      data.tabs[activeIndex.value].active = false;
-      data.tabs[clickedIndex].active = true;
-    };
 
     // computed
     const activeIndex = computed(() => data.tabs.findIndex((t) => t.active));
     const activeComponent = computed(
       () => data.tabs[activeIndex.value].componentName
     );
+
+    const tabClick = async (clickedIndex: number) => {
+      // show modal/loader
+
+      // submit form
+      //console.log("formRef", formRef);
+
+      data.clickedIndex = clickedIndex;
+
+      const valid = formRef.value.formSubmitted();
+
+      // post results
+
+      /*
+      fetch(
+        "https://local-webservices.1stcontact.com/CrmProxy/api/v5/forms/fourl/post",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(store.formModel),
+        }
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("Success:", data);
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+        */
+
+      // when ajax done, activate new tab index
+
+      // now get results
+
+      // when /get is done...
+
+      // hide modal
+
+      // deactivate current tab
+      //data.tabs[activeIndex.value].active = false;
+      // activate next tab
+      //data.tabs[clickedIndex].active = true;
+    };
+
+    const handleSubmit = async (submitData: any) => {
+      // context.emit("handleSubmit", data);
+      console.log("data", submitData);
+
+      // deactivate current tab
+      data.tabs[activeIndex.value].active = false;
+      // activate next tab
+      data.tabs[data.clickedIndex].active = true;
+    };
 
     const appRef = ref<any>(null);
 
@@ -98,27 +150,14 @@ export default defineComponent({
 */
 
       //const formRef = appRef.value.$refs.formRef;
-      const formRef = appRef.value.formRef;
+      //const formRef = appRef.value.formRef;
       //console.log("formRef", formRef);
       const valid = formRef.formSubmitted();
-
-      /*
-      if (valid) {
-        console.log("valid!");
-      } else {
-        console.log("NOT valid!");
-      }
-
-      return;
-
-      */
     };
 
     let activeCmp: string | null = null;
 
     onMounted(async () => {
-      console.log("Form.onMounted");
-
       getCollections();
       populateData();
 
@@ -127,9 +166,7 @@ export default defineComponent({
 
     const getCollections = () => {
       let url =
-        "http://local-webservices.1stcontact.com/odataformapi/api/collection";
-      //url = "http://localhost/Examples.NetFx.CrmODataFormApi/api/collection";
-      url = "http://localhost:3001/db";
+        "https://local-webservices.1stcontact.com/CrmProxy/api/v5/forms/fourl/collection";
       fetch(url)
         .then((response) => response.json())
         .then((data) => {
@@ -140,16 +177,23 @@ export default defineComponent({
     const populateData = () => {
       // mimic getting data from an api
       var url =
-        "http://local-webservices.1stcontact.com/odataformapi/api/fourl";
+        "https://local-webservices.1stcontact.com/odataformapi/api/fourl";
       //url = "http://localhost/Examples.NetFx.CrmODataFormApi/api/fourl";
-      url = "http://localhost:3002/db";
+      //url = "http://localhost:3002/db";
+      url =
+        "https://local-webservices.1stcontact.com/CrmProxy/api/v5/forms/fourl/get?contactId=a161b1bb-72a9-dd11-a616-001f2965fc1c";
       fetch(url)
         .then((response) => response.json())
         .then((data) => {
           /**/
           let vfModel = data;
 
-          console.log("data", data);
+          //if (data.currentPartner.info == null) {
+          //  data.currentPartner.info = {};
+          //}
+          if (data.biometricEnrollment == null) {
+            data.biometricEnrollment = [];
+          }
 
           vfModel = toVueFormulateFormat(data, [
             "biometricEnrollment",
@@ -164,20 +208,12 @@ export default defineComponent({
             "biometricEnrollment.*.new_brplocation",
           ];
 
-          //let b = get(vfModel, "biometricEnrollment.*.new_brpissued");
-          //console.log("b", b);
-
           /**/
           vfModel = boolToStringUpdate(vfModel, boolArray);
 
-          console.log("vfModel", vfModel);
           store.formModel = vfModel;
           //store.formModel = data;
         });
-    };
-
-    const handleSubmit = async (data: any) => {
-      context.emit("handleSubmit", data);
     };
 
     const dataChange = (data: any) => {
@@ -187,12 +223,9 @@ export default defineComponent({
     const boolToStringUpdate = (obj: any, boolArray: string[]) => {
       let o = JSON.parse(JSON.stringify(obj));
       boolArray.forEach((b) => {
-        console.log("looping", b);
         var value = get(o, b);
         if (typeof value != undefined) {
-          console.log("value", value);
           if (Array.isArray(value)) {
-            console.log("is array");
             for (let i = 0; i < value.length; i++) {
               const v = value[i];
               set(o, b.replace(`.*.`, `[${i}]`), v.toString());
@@ -219,6 +252,8 @@ export default defineComponent({
       data,
       Page1,
       Page2,
+      Page3,
+      Page4,
       handleSubmit,
       isSectionComplete,
       nextClick,
@@ -233,6 +268,7 @@ export default defineComponent({
       dataChange,
       activeCmp,
       activeIndex,
+      formRef,
     };
   },
 });
@@ -283,12 +319,37 @@ export default defineComponent({
         v-model="store.formModel"
         @submit="handleSubmit"
         ref="formRef"
-        @validation="validation"
       >
-        <Page1 v-show="activeIndex == 0" />
-        <Page2 v-show="activeIndex == 1" />
-        <Page3 v-show="activeIndex == 2" />
-        <Page4 v-show="activeIndex == 3" />
+        <component
+          :is="activeComponent"
+          @isSectionComplete="isSectionComplete"
+          :default-collections="store.defaultCollections"
+          :custom-collections="store.customCollections"
+        >
+        </component>
+
+        <!--
+        <Page1
+          v-show="activeIndex == 0"
+          :default-collections="store.defaultCollections"
+          :custom-collections="store.customCollections"
+        />
+        <Page2
+          v-show="activeIndex == 1"
+          :default-collections="store.defaultCollections"
+          :custom-collections="store.customCollections"
+        />
+        <Page3
+          v-show="activeIndex == 2"
+          :default-collections="store.defaultCollections"
+          :custom-collections="store.customCollections"
+        />
+        <Page4
+          v-show="activeIndex == 3"
+          :default-collections="store.defaultCollections"
+          :custom-collections="store.customCollections"
+        />
+        -->
       </FormulateForm>
     </fieldset>
     <!-- external end -->
@@ -301,9 +362,10 @@ export default defineComponent({
     <button @click="populateData">Get data</button>
     -->
 
-    <!--
+    <!---->
+    <hr />
     <p>store.formModel</p>
-    <pre>{{ store.formModel }}</pre>-->
+    <pre>{{ store.formModel }}</pre>
   </div>
 </template>
 
